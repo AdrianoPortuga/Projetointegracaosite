@@ -1,0 +1,52 @@
+{
+  "segment": "imobiliaria",
+  "demo_mode": true,
+  "brand": {
+    "headline": "Converta interessados em imoveis com triagem comercial e resposta em minutos",
+    "description": "Base para captar compradores e locatarios com priorizacao por perfil.",
+    "primary_cta": "Quero mais leads qualificados",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "channels": {
+    "site_sdr_enabled": true,
+    "form_enabled": true,
+    "whatsapp_enabled": true
+  },
+  "lead_routing": {
+    "telegram_enabled": true,
+    "clickup_enabled": true,
+    "form_endpoint_path": "/leads/codesagency",
+    "form_origin_label": "site_form_imobiliaria",
+    "demo_allow_live_submit": false
+  },
+  "sdr": {
+    "tone": "consultivo_comercial",
+    "goal": "identificar perfil do imovel e intencao de compra ou locacao",
+    "collect_fields": ["nome", "telefone", "tipo_imovel", "faixa_orcamento"],
+    "handoff_trigger": "intencao_clara_de_visita",
+    "button_label": "Atendimento imobiliario",
+    "chat_title": "Consultor Imobiliario",
+    "opening_message": "Posso te ajudar a filtrar os melhores imoveis para seu perfil.",
+    "input_placeholder": "Ex: Procuro T2 para compra em Lisboa"
+  },
+  "faq": [
+    {
+      "question": "O SDR diferencia compra e locacao?",
+      "answer": "Sim. O fluxo captura tipo de negocio, regiao e faixa de valor."
+    },
+    {
+      "question": "O corretor recebe um resumo antes do contato?",
+      "answer": "Sim. O handoff inclui contexto para acelerar o atendimento."
+    }
+  ],
+  "offers": [
+    {
+      "title": "Triagem de perfil do comprador",
+      "description": "Coleta dados essenciais antes do corretor assumir."
+    },
+    {
+      "title": "Handoff com prioridade comercial",
+      "description": "Leads com intencao forte seguem para fila prioritaria."
+    }
+  ]
+}

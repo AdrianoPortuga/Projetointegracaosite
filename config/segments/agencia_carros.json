@@ -1,0 +1,52 @@
+{
+  "segment": "agencia_carros",
+  "demo_mode": true,
+  "brand": {
+    "headline": "Transforme visitas no site em test-drive e propostas comerciais",
+    "description": "Template para agencias de carros com resposta imediata e qualificacao por interesse.",
+    "primary_cta": "Quero vender mais veiculos",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "channels": {
+    "site_sdr_enabled": true,
+    "form_enabled": true,
+    "whatsapp_enabled": true
+  },
+  "lead_routing": {
+    "telegram_enabled": true,
+    "clickup_enabled": true,
+    "form_endpoint_path": "/leads/codesagency",
+    "form_origin_label": "site_form_agencia_carros",
+    "demo_allow_live_submit": false
+  },
+  "sdr": {
+    "tone": "consultivo_comercial",
+    "goal": "identificar modelo de interesse e intencao de compra",
+    "collect_fields": ["nome", "telefone", "modelo_interesse", "faixa_orcamento"],
+    "handoff_trigger": "pedido_de_proposta_ou_test_drive",
+    "button_label": "Atendimento de vendas",
+    "chat_title": "Consultor de Veiculos",
+    "opening_message": "Posso te ajudar a encontrar o carro ideal e acelerar sua proposta.",
+    "input_placeholder": "Ex: Quero SUV ate 30 mil euros"
+  },
+  "faq": [
+    {
+      "question": "Consigo diferenciar compra financiada e a vista?",
+      "answer": "Sim. O fluxo pode qualificar tipo de pagamento e prazo de decisao."
+    },
+    {
+      "question": "O vendedor recebe resumo antes do contato?",
+      "answer": "Sim. O handoff segue com contexto comercial estruturado."
+    }
+  ],
+  "offers": [
+    {
+      "title": "SDR para pre-venda de veiculos",
+      "description": "Triagem de interesse e orçamento antes da abordagem humana."
+    },
+    {
+      "title": "Pipeline de proposta e test-drive",
+      "description": "Lead qualificado com prioridade para conversao."
+    }
+  ]
+}

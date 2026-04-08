@@ -1,0 +1,52 @@
+{
+  "segment": "advocacia",
+  "demo_mode": true,
+  "brand": {
+    "headline": "Capte casos com triagem comercial e resposta em minutos",
+    "description": "Estrutura para escritórios que precisam filtrar casos e priorizar atendimento qualificado.",
+    "primary_cta": "Quero novos casos qualificados",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "channels": {
+    "site_sdr_enabled": true,
+    "form_enabled": true,
+    "whatsapp_enabled": true
+  },
+  "lead_routing": {
+    "telegram_enabled": true,
+    "clickup_enabled": true,
+    "form_endpoint_path": "/leads/codesagency",
+    "form_origin_label": "site_form_advocacia",
+    "demo_allow_live_submit": false
+  },
+  "sdr": {
+    "tone": "objetivo_reservado",
+    "goal": "qualificar caso e urgencia antes de consulta humana",
+    "collect_fields": ["nome", "telefone", "area_juridica", "urgencia"],
+    "handoff_trigger": "pedido_de_analise_juridica",
+    "button_label": "Falar com triagem",
+    "chat_title": "Triagem Juridica",
+    "opening_message": "Posso te ajudar a identificar o melhor proximo passo para o seu caso.",
+    "input_placeholder": "Ex: Preciso de orientacao em direito trabalhista"
+  },
+  "faq": [
+    {
+      "question": "O SDR substitui consulta juridica?",
+      "answer": "Nao. Ele apenas organiza o contexto inicial e encaminha para o especialista."
+    },
+    {
+      "question": "Posso separar casos por area do direito?",
+      "answer": "Sim. O fluxo de captura permite segmentar area e urgencia."
+    }
+  ],
+  "offers": [
+    {
+      "title": "Triagem inicial por nicho juridico",
+      "description": "Lead chega com contexto para reduzir retrabalho da equipe."
+    },
+    {
+      "title": "Handoff com prioridade",
+      "description": "Casos sensiveis podem entrar em fila acelerada."
+    }
+  ]
+}

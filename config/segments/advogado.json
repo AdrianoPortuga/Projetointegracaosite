@@ -1,0 +1,35 @@
+{
+  "segment": "advogado",
+  "brand": {
+    "headline": "Capte casos qualificados sem perder agilidade no primeiro contato",
+    "description": "Fluxo orientado para triagem inicial e encaminhamento jurídico com contexto.",
+    "primary_cta": "Quero triar novos casos",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "sdr": {
+    "tone": "objetivo_reservado",
+    "goal": "coletar contexto do caso e urgência para atendimento humano",
+    "collect_fields": ["nome", "telefone", "area_juridica", "urgencia"],
+    "handoff_trigger": "pedido_de_analise_juridica"
+  },
+  "faq": [
+    {
+      "question": "O atendimento substitui o advogado?",
+      "answer": "Não. O SDR apenas faz pré-qualificação e encaminha para o especialista."
+    },
+    {
+      "question": "É possível separar leads por área?",
+      "answer": "Sim. O formulário e o SDR podem mapear área e prioridade."
+    }
+  ],
+  "offers": [
+    {
+      "title": "Pré-triagem jurídica",
+      "description": "Coleta inicial de contexto antes da análise técnica."
+    },
+    {
+      "title": "Distribuição de casos",
+      "description": "Encaminhamento automático por prioridade no pipeline."
+    }
+  ]
+}
