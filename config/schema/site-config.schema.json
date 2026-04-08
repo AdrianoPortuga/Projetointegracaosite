@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codestech.pt/schemas/site-config.schema.json",
+  "title": "Codestech Site Template Config",
+  "type": "object",
+  "required": [
+    "client_slug",
+    "segment",
+    "brand",
+    "channels",
+    "lead_routing",
+    "sdr",
+    "faq",
+    "offers"
+  ],
+  "properties": {
+    "client_slug": { "type": "string", "minLength": 2 },
+    "segment": { "type": "string", "minLength": 2 },
+    "brand": {
+      "type": "object",
+      "required": ["name", "headline", "primary_cta"],
+      "properties": {
+        "name": { "type": "string" },
+        "headline": { "type": "string" },
+        "description": { "type": "string" },
+        "primary_cta": { "type": "string" },
+        "primary_cta_href": { "type": "string" }
+      }
+    },
+    "channels": {
+      "type": "object",
+      "required": ["site_sdr_enabled", "form_enabled", "whatsapp_enabled"],
+      "properties": {
+        "site_sdr_enabled": { "type": "boolean" },
+        "form_enabled": { "type": "boolean" },
+        "whatsapp_enabled": { "type": "boolean" },
+        "whatsapp_number": { "type": "string" }
+      }
+    },
+    "lead_routing": {
+      "type": "object",
+      "required": ["telegram_enabled", "clickup_enabled"],
+      "properties": {
+        "telegram_enabled": { "type": "boolean" },
+        "clickup_enabled": { "type": "boolean" }
+      }
+    },
+    "sdr": {
+      "type": "object",
+      "required": ["tone", "goal", "collect_fields", "handoff_trigger"],
+      "properties": {
+        "tone": { "type": "string" },
+        "goal": { "type": "string" },
+        "collect_fields": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "handoff_trigger": { "type": "string" },
+        "origin_label": { "type": "string" },
+        "opening_message": { "type": "string" },
+        "chat_title": { "type": "string" },
+        "input_placeholder": { "type": "string" }
+      }
+    },
+    "faq": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["question", "answer"],
+        "properties": {
+          "question": { "type": "string" },
+          "answer": { "type": "string" }
+        }
+      }
+    },
+    "offers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title"],
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  }
+}

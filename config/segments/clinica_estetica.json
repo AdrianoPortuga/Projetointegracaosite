@@ -1,0 +1,35 @@
+{
+  "segment": "clinica_estetica",
+  "brand": {
+    "headline": "Conquiste pacientes com atendimento imediato e previsibilidade comercial",
+    "description": "Template focado em captação, pré-qualificação e agendamento para clínicas estéticas.",
+    "primary_cta": "Quero aumentar minhas consultas",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "sdr": {
+    "tone": "consultivo_profissional",
+    "goal": "qualificar lead para consulta avaliativa",
+    "collect_fields": ["nome", "telefone", "procedimento_interesse", "urgencia"],
+    "handoff_trigger": "lead_quente_ou_pedido_de_preco"
+  },
+  "faq": [
+    {
+      "question": "Vocês atendem leads para harmonização facial e corporal?",
+      "answer": "Sim. O fluxo pode separar interesse por procedimento e encaminhar para o especialista certo."
+    },
+    {
+      "question": "O SDR já coleta dados para confirmação no WhatsApp?",
+      "answer": "Sim. Nome, telefone e contexto da necessidade seguem no handoff."
+    }
+  ],
+  "offers": [
+    {
+      "title": "Atendimento 24/7 com SDR",
+      "description": "Respostas imediatas para não perder intenção de compra."
+    },
+    {
+      "title": "Pipeline com ClickUp + Telegram",
+      "description": "Lead qualificado distribuído para operação comercial."
+    }
+  ]
+}

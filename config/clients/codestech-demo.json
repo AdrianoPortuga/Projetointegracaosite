@@ -1,0 +1,39 @@
+{
+  "client_slug": "codestech-demo",
+  "segment": "clinica_estetica",
+  "brand": {
+    "name": "Clinica Aurora",
+    "headline": "Aumente suas consultas com atendimento comercial orientado por SDR",
+    "description": "Site-base com SDR, formulário e tracking para captar e qualificar pacientes.",
+    "primary_cta": "Quero acelerar minha captação",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "channels": {
+    "site_sdr_enabled": true,
+    "form_enabled": true,
+    "whatsapp_enabled": true,
+    "whatsapp_number": "+351912345678"
+  },
+  "lead_routing": {
+    "telegram_enabled": true,
+    "clickup_enabled": true
+  },
+  "sdr": {
+    "origin_label": "site_widget_codestech_demo",
+    "chat_title": "Consultora Virtual",
+    "opening_message": "Olá, posso te ajudar a entender qual tratamento e plano faz mais sentido para você.",
+    "input_placeholder": "Ex: Quero saber valores e prazos para harmonização"
+  },
+  "faq": [
+    {
+      "question": "Vocês atendem primeira consulta sem compromisso?",
+      "answer": "Sim, nossa equipe orienta você sobre a melhor opção para o seu objetivo."
+    }
+  ],
+  "offers": [
+    {
+      "title": "Diagnóstico comercial em minutos",
+      "description": "SDR identifica o melhor próximo passo para seu caso."
+    }
+  ]
+}

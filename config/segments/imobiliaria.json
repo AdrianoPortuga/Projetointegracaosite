@@ -1,0 +1,35 @@
+{
+  "segment": "imobiliaria",
+  "brand": {
+    "headline": "Converta interessados em imóveis com triagem comercial e resposta em minutos",
+    "description": "Base para captação de compradores e locatários com priorização por perfil.",
+    "primary_cta": "Quero mais leads qualificados",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "sdr": {
+    "tone": "consultivo_comercial",
+    "goal": "identificar perfil do imóvel e intenção de compra/locação",
+    "collect_fields": ["nome", "telefone", "tipo_imovel", "faixa_orcamento"],
+    "handoff_trigger": "intencao_clara_de_visita"
+  },
+  "faq": [
+    {
+      "question": "O SDR diferencia compra de locação?",
+      "answer": "Sim. O fluxo captura interesse e faixa de orçamento."
+    },
+    {
+      "question": "Posso segmentar por região?",
+      "answer": "Sim. Campos de captura podem incluir bairros e cidade."
+    }
+  ],
+  "offers": [
+    {
+      "title": "Triagem para imóveis",
+      "description": "Coleta dados antes do corretor assumir o atendimento."
+    },
+    {
+      "title": "Priorização por intenção",
+      "description": "Leads quentes entram em fluxo de resposta prioritária."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "segment": "restaurante",
+  "brand": {
+    "headline": "Transforme visitas no site em reservas e pedidos com atendimento imediato",
+    "description": "Estrutura para restaurantes que precisam responder rápido e converter demanda.",
+    "primary_cta": "Quero aumentar minhas reservas",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "sdr": {
+    "tone": "amigavel_direto",
+    "goal": "captar intenção para reserva ou evento",
+    "collect_fields": ["nome", "telefone", "numero_pessoas", "data_evento"],
+    "handoff_trigger": "pedido_de_reserva_ou_evento"
+  },
+  "faq": [
+    {
+      "question": "Posso usar para reservas e eventos?",
+      "answer": "Sim. O fluxo pode separar reserva de salão e eventos corporativos."
+    },
+    {
+      "question": "Recebo aviso rápido de lead quente?",
+      "answer": "Sim. O handoff pode disparar alertas no Telegram."
+    }
+  ],
+  "offers": [
+    {
+      "title": "SDR para reservas",
+      "description": "Atendimento inicial para organizar contato e intenção."
+    },
+    {
+      "title": "Handoff com contexto",
+      "description": "Equipe recebe resumo antes de responder o cliente."
+    }
+  ]
+}
