@@ -1,6 +1,7 @@
 {
   "client_slug": "codestech-demo",
   "segment": "clinica_estetica",
+  "demo_mode": true,
   "brand": {
     "name": "Clinica Aurora",
     "headline": "Aumente suas consultas com atendimento comercial orientado por SDR",

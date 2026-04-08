@@ -11,6 +11,9 @@ async function bootstrap() {
     renderLanding(config);
     renderLeadForm(config);
     initSdrWidget(config);
+    document.body.setAttribute("data-client-slug", String(config.client_slug || ""));
+    document.body.setAttribute("data-segment", String(config.segment || ""));
+    document.body.setAttribute("data-demo-mode", String(Boolean(config.demo_mode)));
     window.__SITE_TEMPLATE_READY__ = true;
   } catch (error) {
     console.error("[site_template] bootstrap error", error);

@@ -1,4 +1,5 @@
 import { collectTrackingContext } from "../../utils/tracking/context.js";
+import { buildFormPayload } from "../../utils/lead/formPayload.js";
 
 export function renderLeadForm(config) {
   const container = document.getElementById("lead-form-container");
@@ -11,11 +12,18 @@ export function renderLeadForm(config) {
 
   const collectFields = Array.isArray(config?.sdr?.collect_fields) ? config.sdr.collect_fields : [];
   const includePhone = collectFields.includes("telefone");
+  const dynamicFields = collectFields.filter(
+    (field) => !["nome", "email", "telefone", "mensagem"].includes(field)
+  );
 
   container.innerHTML = `
     <form class="lead-form" id="lead-form">
       <h2>Solicite atendimento</h2>
-      <small>Este form é template base. Conecte o submit ao endpoint final de leads conforme cliente.</small>
+      <small>${
+        config?.demo_mode
+          ? "Modo DEMO ativo: envio real desativado por padrão."
+          : "Formulário conectado via configuração de lead routing."
+      }</small>
       <div class="lead-form-grid">
         <label>
           Nome
@@ -33,6 +41,14 @@ export function renderLeadForm(config) {
               </label>`
             : ""
         }
+        ${dynamicFields
+          .map(
+            (field) => `<label>
+              ${toLabel(field)}
+              <input type="text" name="${field}" />
+            </label>`
+          )
+          .join("")}
         <label class="lead-form-grid-full">
           Mensagem
           <textarea name="mensagem" rows="4"></textarea>
@@ -50,13 +66,49 @@ export function renderLeadForm(config) {
   form.addEventListener("submit", (event) => {
     event.preventDefault();
     const data = new FormData(form);
-    const payload = Object.fromEntries(data.entries());
-    status.textContent = "Form capturado localmente. Conecte aqui o endpoint de lead quando for publicar.";
-    console.info("[lead_form_template]", {
-      payload,
-      tracking: collectTrackingContext(),
-      client_slug: config.client_slug,
-      segment: config.segment
-    });
+    const rawForm = Object.fromEntries(data.entries());
+    const payload = buildFormPayload({ formData: rawForm, config });
+    const runtimeApiBaseUrl = window.__SITE_RUNTIME_CONFIG__?.apiBaseUrl || null;
+    const endpointPath = config?.lead_routing?.form_endpoint_path || "/leads/codesagency";
+    const blockLiveSubmit = Boolean(config?.demo_mode && config?.lead_routing?.demo_allow_live_submit !== true);
+
+    if (!runtimeApiBaseUrl || blockLiveSubmit) {
+      status.textContent = blockLiveSubmit
+        ? "Lead marcado como DEMO. Sem envio real nesta configuração."
+        : "Sem SDR_API_BASE_URL para envio real.";
+      console.info("[lead_form_template_local]", {
+        payload,
+        tracking: collectTrackingContext(),
+        client_slug: config.client_slug,
+        segment: config.segment,
+        demo_mode: config.demo_mode
+      });
+      return;
+    }
+
+    fetch(`${String(runtimeApiBaseUrl).replace(/\/+$/, "")}${endpointPath}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify(payload)
+    })
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        status.textContent = "Lead enviado com sucesso.";
+      })
+      .catch((error) => {
+        status.textContent = "Falha no envio do lead. Verifique a rota configurada.";
+        console.error("[lead_form_template_submit] erro", error);
+      });
   });
+}
+
+function toLabel(field) {
+  return String(field || "")
+    .replaceAll("_", " ")
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }

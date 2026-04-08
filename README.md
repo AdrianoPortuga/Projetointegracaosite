@@ -1,6 +1,12 @@
-# Codestech Plug-and-Play Site Template
+# Codestech Template - Mostruario com SDR
 
-Base oficial para replicar sites comerciais com SDR, formulário e tracking sem misturar regras de clientes.
+Base plug-and-play para vitrines comerciais com:
+
+- landing orientada por JSON
+- SDR widget
+- formulario
+- tracking
+- handoff preparado para pipeline
 
 ## Estrutura
 
@@ -21,27 +27,63 @@ scripts/
 api/
 ```
 
-## Como funciona
+## Resolucao do cliente ativo
 
-1. `scripts/bootstrap.js` carrega config do cliente (`config/clients/*.json`).
-2. Loader mescla com pack de segmento (`config/segments/*.json`).
-3. Landing, form e SDR recebem a configuração final.
-4. SDR envia para `POST /sdr/chat` usando `SDR_API_BASE_URL` vindo de `/api/sdr-config`.
+Ordem de prioridade:
 
-## Variáveis de ambiente
+1. `SITE_CLIENT_SLUG` vindo de `/api/sdr-config` (env do Vercel)
+2. `meta[name="site-client-slug"]` em `index.html`
+3. `?client=` na URL (fallback tecnico de homologacao)
+4. fallback final: `advocacia-demo`
+
+## Demo mode
+
+- `DEMO_MODE=true` (env) ou `demo_mode=true` no JSON do cliente.
+- Quando ativo:
+  - origem SDR e form saem com prefixo `DEMO_`
+  - payload inclui `demo_mode=true`
+  - form nao envia para endpoint real por padrao (`demo_allow_live_submit=false`)
+
+## Demos prontas
+
+- `advocacia-demo` (demo principal)
+- `AgenciaCarro-demo`
+- `imobiliaria-demo`
+
+## Deploy no Vercel (3 projetos)
+
+Sugestao de nomes:
+
+1. `codestech-demo-advocacia`
+2. `codestech-demo-agenciacarros`
+3. `codestech-demo-imobiliaria`
+
+Envs minimas para cada projeto:
 
 - `SDR_API_BASE_URL=https://leads-api.schoolia.online`
+- `SITE_CLIENT_SLUG=<slug do projeto>`
+- `DEMO_MODE=true`
+
+Mapeamento de `SITE_CLIENT_SLUG`:
+
+- `codestech-demo-advocacia` -> `advocacia-demo`
+- `codestech-demo-agenciacarros` -> `AgenciaCarro-demo`
+- `codestech-demo-imobiliaria` -> `imobiliaria-demo`
 
 ## Criar novo cliente
 
-1. Gerar arquivo base:
-   - `node scripts/create-client-config.mjs <client-slug> <segment>`
-2. Editar `config/clients/<client-slug>.json`.
-3. Abrir site com `?client=<client-slug>` para testar.
-4. Ajustar `meta[name="site-client-slug"]` em `index.html` quando quiser fixar um cliente padrão.
+```bash
+node scripts/create-client-config.mjs <client-slug> <segment>
+```
+
+Depois:
+
+1. editar `config/clients/<client-slug>.json`
+2. garantir que o segmento existe em `config/segments`
+3. publicar em projeto Vercel com `SITE_CLIENT_SLUG=<client-slug>`
 
 ## Schema
 
-Schema oficial em:
+Schema oficial:
 
 - `config/schema/site-config.schema.json`

@@ -40,13 +40,14 @@ export function initSdrWidget(config) {
 
     const title = siteConfig?.sdr?.chat_title || "SDR Virtual";
     const focus = sdrConfig.goal || "qualificacao_comercial";
+    const modeTag = siteConfig?.demo_mode ? " [DEMO]" : "";
     const placeholder = siteConfig?.sdr?.input_placeholder || "Digite sua necessidade comercial";
     const sendLabel = siteConfig?.sdr?.send_button_label || "Enviar";
     const closeLabel = siteConfig?.sdr?.new_chat_button_label || "Nova conversa";
 
     panel.innerHTML = [
       '<header id="sdr-widget-header">',
-      title,
+      `${title}${modeTag}`,
       `<p id="sdr-widget-focus">Foco atual: ${focus}</p>`,
       "</header>",
       '<div id="sdr-widget-messages"></div>',

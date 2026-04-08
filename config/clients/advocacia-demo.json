@@ -1,0 +1,51 @@
+{
+  "client_slug": "advocacia-demo",
+  "segment": "advocacia",
+  "demo_mode": true,
+  "brand": {
+    "name": "Almeida e Torres Advocacia",
+    "headline": "Seu escritorio com triagem digital para captar casos com mais velocidade",
+    "description": "Mostruario Codestech para advocacia com SDR comercial, formulario e handoff controlado.",
+    "primary_cta": "Quero receber casos qualificados",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "channels": {
+    "site_sdr_enabled": true,
+    "form_enabled": true,
+    "whatsapp_enabled": true,
+    "whatsapp_number": "+351910000001"
+  },
+  "lead_routing": {
+    "telegram_enabled": true,
+    "clickup_enabled": true,
+    "form_origin_label": "site_form_advocacia_demo",
+    "demo_allow_live_submit": false
+  },
+  "sdr": {
+    "origin_label": "site_widget_advocacia_demo",
+    "chat_title": "Triagem Juridica Demo",
+    "opening_message": "Ola. Posso coletar os pontos principais do seu caso para agilizar o atendimento.",
+    "input_placeholder": "Ex: Preciso de apoio em rescisao trabalhista",
+    "collect_fields": ["nome", "telefone", "area_juridica", "urgencia", "cidade"]
+  },
+  "offers": [
+    {
+      "title": "Triagem inicial com roteiro comercial",
+      "description": "Classifica area juridica e urgencia antes da equipe humana."
+    },
+    {
+      "title": "Handoff marcado como DEMO",
+      "description": "Fluxo de vitrine sem risco de contaminar a operacao final."
+    }
+  ],
+  "faq": [
+    {
+      "question": "Este demo envia para atendimento real?",
+      "answer": "Nao. Esta configurado em modo demo com origem marcada."
+    },
+    {
+      "question": "Posso adaptar para meu escritorio?",
+      "answer": "Sim. Basta duplicar o client_slug e ajustar branding e regras."
+    }
+  ]
+}

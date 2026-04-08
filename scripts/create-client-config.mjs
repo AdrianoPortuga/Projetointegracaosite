@@ -17,6 +17,7 @@ if (fs.existsSync(filePath)) {
 const payload = {
   client_slug: clientSlug,
   segment,
+  demo_mode: false,
   brand: {
     name: "Novo Cliente",
     headline: "Edite este headline",
@@ -32,7 +33,10 @@ const payload = {
   },
   lead_routing: {
     telegram_enabled: true,
-    clickup_enabled: true
+    clickup_enabled: true,
+    form_endpoint_path: "/leads/codesagency",
+    form_origin_label: `site_form_${clientSlug}`,
+    demo_allow_live_submit: false
   },
   sdr: {
     origin_label: `site_widget_${clientSlug}`,

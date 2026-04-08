@@ -1,0 +1,51 @@
+{
+  "client_slug": "AgenciaCarro-demo",
+  "segment": "agencia_carros",
+  "demo_mode": true,
+  "brand": {
+    "name": "NovaRota Automoveis",
+    "headline": "Vitrine de veiculos com SDR para acelerar proposta e test-drive",
+    "description": "Demo comercial para agencias de carros com captação digital e handoff em modo controlado.",
+    "primary_cta": "Quero vender mais carros",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "channels": {
+    "site_sdr_enabled": true,
+    "form_enabled": true,
+    "whatsapp_enabled": true,
+    "whatsapp_number": "+351910000002"
+  },
+  "lead_routing": {
+    "telegram_enabled": true,
+    "clickup_enabled": true,
+    "form_origin_label": "site_form_agenciacarro_demo",
+    "demo_allow_live_submit": false
+  },
+  "sdr": {
+    "origin_label": "site_widget_agenciacarro_demo",
+    "chat_title": "Consultor de Veiculos Demo",
+    "opening_message": "Posso te ajudar a encontrar o modelo ideal e montar a melhor proposta.",
+    "input_placeholder": "Ex: Quero hatch automatico ate 20 mil euros",
+    "collect_fields": ["nome", "telefone", "modelo_interesse", "faixa_orcamento", "forma_pagamento"]
+  },
+  "offers": [
+    {
+      "title": "Qualificacao por interesse de veiculo",
+      "description": "Identifica modelo, orcamento e prazo de compra."
+    },
+    {
+      "title": "Fluxo de proposta assistida",
+      "description": "Equipe recebe resumo para contato com mais contexto."
+    }
+  ],
+  "faq": [
+    {
+      "question": "Esse demo pode ser usado para test-drive?",
+      "answer": "Sim. O SDR pode capturar interesse e melhor horario para contato."
+    },
+    {
+      "question": "O envio e real?",
+      "answer": "Neste mostruario o modo demo fica ativo para evitar operacao real."
+    }
+  ]
+}

@@ -2,10 +2,20 @@ export function renderLanding(config) {
   const brand = config?.brand || {};
   const offers = Array.isArray(config?.offers) ? config.offers : [];
   const faq = Array.isArray(config?.faq) ? config.faq : [];
+  const demoMode = Boolean(config?.demo_mode);
 
   setText("brand-name", brand.name || "Codestech");
   setText("brand-headline", brand.headline || "Template comercial plug-and-play");
   setText("brand-description", brand.description || "Base escalável para SDR e handoff.");
+  setText("segment-pill", `segment: ${config?.segment || "geral"}`);
+  setText("client-pill", `client: ${config?.client_slug || "default"}`);
+  setText("mode-pill", demoMode ? "DEMO MODE" : "LIVE MODE");
+
+  const modePill = document.getElementById("mode-pill");
+  if (modePill) {
+    modePill.classList.toggle("pill-alert", !demoMode);
+    modePill.classList.toggle("pill-muted", demoMode);
+  }
 
   const cta = document.getElementById("primary-cta");
   if (cta) {
