@@ -11,6 +11,7 @@ Base plug-and-play para onboarding real de clientes com:
 Playbook operacional de implantação por cliente:
 
 - `docs/vercel-client-playbook.md`
+- `docs/onboarding-agent-architecture.md`
 
 ## Estrutura
 
