@@ -20,8 +20,8 @@
     "clickup_enabled": true,
     "clickup_list_id": "CLICKUP_LIST_DEMO_CARROS",
     "telegram_chat_id": "TELEGRAM_CHAT_DEMO_CARROS",
-    "sdr_endpoint_path": "/sdr/chat",
-    "form_endpoint_path": "/leads/codesagency",
+    "sdr_endpoint_path": "/api/sdr/chat",
+    "form_endpoint_path": "/api/lead/codesagency",
     "form_origin_label": "site_form_agenciacarro_demo",
     "demo_allow_live_submit": false,
     "route_module": "chat_atendimento"

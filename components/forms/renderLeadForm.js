@@ -6,7 +6,7 @@ export function renderLeadForm(config) {
   if (!container) return;
 
   if (!config?.channels?.form_enabled) {
-    container.innerHTML = "<p>Canal de formulário desativado para este cliente.</p>";
+    container.innerHTML = "<p>Canal de formulario desativado para este cliente.</p>";
     return;
   }
 
@@ -17,8 +17,8 @@ export function renderLeadForm(config) {
       <h2>Solicite atendimento</h2>
       <small>${
         config?.demo_mode
-          ? "Modo DEMO ativo: envio real desativado por padrão."
-          : "Formulário conectado via configuração de lead routing."
+          ? "Modo DEMO ativo: envio real desativado por padrao."
+          : "Formulario conectado via configuracao de lead routing."
       }</small>
       <div class="lead-form-grid">
         ${formFields.map((field) => renderField(field)).join("")}
@@ -37,14 +37,13 @@ export function renderLeadForm(config) {
     const data = new FormData(form);
     const rawForm = Object.fromEntries(data.entries());
     const payload = buildFormPayload({ formData: rawForm, config });
-    const runtimeApiBaseUrl = window.__SITE_RUNTIME_CONFIG__?.apiBaseUrl || null;
-    const endpointPath = config?.lead_routing?.form_endpoint_path || "/leads/codesagency";
+    const localApiBaseUrl = window.__SITE_RUNTIME_CONFIG__?.localApiBaseUrl || "/api";
+    const endpointPath = config?.lead_routing?.form_endpoint_path || "/api/lead/codesagency";
+    const proxyPath = resolveProxyPath(localApiBaseUrl, endpointPath);
     const blockLiveSubmit = Boolean(config?.demo_mode && config?.lead_routing?.demo_allow_live_submit !== true);
 
-    if (!runtimeApiBaseUrl || blockLiveSubmit) {
-      status.textContent = blockLiveSubmit
-        ? "Lead marcado como DEMO. Sem envio real nesta configuração."
-        : "Sem SDR_API_BASE_URL para envio real.";
+    if (blockLiveSubmit) {
+      status.textContent = "Lead marcado como DEMO. Sem envio real nesta configuracao.";
       console.info("[lead_form_template_local]", {
         payload,
         tracking: collectTrackingContext(),
@@ -55,7 +54,7 @@ export function renderLeadForm(config) {
       return;
     }
 
-    fetch(`${String(runtimeApiBaseUrl).replace(/\/+$/, "")}${endpointPath}`, {
+    fetch(proxyPath, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -86,7 +85,7 @@ function renderField(field) {
   const isTextarea = field.type === "textarea";
   const className = field.fullWidth ? " class=\"lead-form-grid-full\"" : "";
   const requiredAttr = field.required ? " required" : "";
-  const placeholder = field.placeholder ? ` placeholder=\"${escapeHtml(field.placeholder)}\"` : "";
+  const placeholder = field.placeholder ? ` placeholder="${escapeHtml(field.placeholder)}"` : "";
   const label = escapeHtml(field.label);
   const name = escapeHtml(field.name);
   const type = escapeHtml(field.type || "text");
@@ -142,4 +141,15 @@ function escapeHtml(value) {
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
+}
+
+function resolveProxyPath(localApiBase, configuredPath) {
+  const base = String(localApiBase || "/api").replace(/\/+$/, "");
+  const path = String(configuredPath || "").trim();
+
+  if (!path) return `${base}/lead/codesagency`;
+  if (/^https?:\/\//i.test(path)) return path;
+  if (path.startsWith("/api/")) return path;
+  if (path.startsWith("/")) return `${base}${path}`;
+  return `${base}/${path}`;
 }

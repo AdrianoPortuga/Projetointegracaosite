@@ -17,8 +17,8 @@ export function initSdrWidget(config) {
     isOpen: false,
     isLoading: false,
     chatClosed: false,
-    apiBaseUrl: (window.__SDR_WIDGET_CONFIG__?.apiBaseUrl || "").replace(/\/+$/, ""),
-    apiReady: Boolean(window.__SDR_WIDGET_CONFIG__?.apiBaseUrl),
+    apiBaseUrl: (window.__SDR_WIDGET_CONFIG__?.apiBaseUrl || "/api").replace(/\/+$/, ""),
+    apiReady: true,
     messages: []
   };
 
@@ -26,7 +26,7 @@ export function initSdrWidget(config) {
   wireEvents(ui);
 
   if (!state.apiReady) {
-    ui.status.textContent = "Widget ativo, mas sem SDR_API_BASE_URL configurada.";
+    ui.status.textContent = "Widget ativo, mas proxy local indisponivel.";
     ui.submit.disabled = true;
     ui.input.disabled = true;
   }
@@ -129,7 +129,7 @@ export function initSdrWidget(config) {
     if (!cleanText) return;
 
     if (!state.apiReady || !state.apiBaseUrl) {
-      appendMessage("assistant", "Configuracao ausente: defina SDR_API_BASE_URL na Vercel.", elements);
+      appendMessage("assistant", "Proxy local indisponivel no momento.", elements);
       return;
     }
 
@@ -154,8 +154,9 @@ export function initSdrWidget(config) {
     setLoading(elements, true);
 
     try {
-      const sdrEndpointPath = routingConfig.sdr_endpoint_path || "/sdr/chat";
-      const response = await fetch(`${state.apiBaseUrl}${sdrEndpointPath}`, {
+      const sdrEndpointPath = routingConfig.sdr_endpoint_path || "/api/sdr/chat";
+      const proxyPath = resolveProxyPath(state.apiBaseUrl, sdrEndpointPath);
+      const response = await fetch(proxyPath, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -255,4 +256,15 @@ function escapeHtml(value) {
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
+}
+
+function resolveProxyPath(localApiBase, configuredPath) {
+  const base = String(localApiBase || "/api").replace(/\/+$/, "");
+  const path = String(configuredPath || "").trim();
+
+  if (!path) return `${base}/sdr/chat`;
+  if (/^https?:\/\//i.test(path)) return path;
+  if (path.startsWith("/api/")) return path;
+  if (path.startsWith("/")) return `${base}${path}`;
+  return `${base}/${path}`;
 }

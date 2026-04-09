@@ -1,5 +1,7 @@
 export default function handler(req, res) {
-  const apiBaseUrl = process.env.SDR_API_BASE_URL || process.env.VITE_SDR_API_BASE_URL || "";
+  const backendConfigured = Boolean(
+    String(process.env.BACKEND_BASE_URL || process.env.SDR_API_BASE_URL || process.env.VITE_SDR_API_BASE_URL || "").trim()
+  );
   const siteClientSlug = process.env.SITE_CLIENT_SLUG || "";
   const demoModeRaw = process.env.DEMO_MODE || "";
   const operationalModeRaw = process.env.OPERATIONAL_MODE || "";
@@ -8,7 +10,9 @@ export default function handler(req, res) {
 
   res.setHeader("Cache-Control", "no-store");
   res.status(200).json({
-    apiBaseUrl,
+    localApiBaseUrl: "/api",
+    proxyEnabled: true,
+    backendConfigured,
     siteClientSlug,
     demoMode,
     operationalMode
