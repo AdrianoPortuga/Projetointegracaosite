@@ -1,0 +1,18 @@
+{
+  "client_slug": "advocacia-demo",
+  "segment": "advocacia",
+  "business_name": "Almeida e Torres Advocacia",
+  "brand_name": "Almeida e Torres Advocacia",
+  "headline": "Triagem juridica com handoff rapido para especialista",
+  "primary_cta": "Quero receber casos qualificados",
+  "service_scope": [
+    "direito trabalhista",
+    "direito civel",
+    "consultoria empresarial"
+  ],
+  "target_region": "Portugal",
+  "differentials": [
+    "primeiro atendimento em minutos",
+    "roteiro de triagem por area juridica"
+  ]
+}

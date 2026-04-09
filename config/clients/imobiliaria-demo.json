@@ -1,7 +1,7 @@
 {
   "client_slug": "imobiliaria-demo",
   "segment": "imobiliaria",
-  "demo_mode": true,
+  "operational_mode": "demo",
   "brand": {
     "name": "PrimeHome Imobiliaria",
     "headline": "Capte compradores e locatarios com atendimento digital e resposta rapida",
@@ -12,22 +12,50 @@
   "channels": {
     "site_sdr_enabled": true,
     "form_enabled": true,
-    "whatsapp_enabled": true,
-    "whatsapp_number": "+351910000003"
+    "whatsapp_enabled": false,
+    "whatsapp_number": ""
   },
   "lead_routing": {
     "telegram_enabled": true,
     "clickup_enabled": true,
+    "clickup_list_id": "CLICKUP_LIST_DEMO_IMOBILIARIA",
+    "telegram_chat_id": "TELEGRAM_CHAT_DEMO_IMOBILIARIA",
+    "sdr_endpoint_path": "/sdr/chat",
+    "form_endpoint_path": "/leads/codesagency",
     "form_origin_label": "site_form_imobiliaria_demo",
-    "demo_allow_live_submit": false
+    "demo_allow_live_submit": false,
+    "route_module": "chat_atendimento"
   },
   "sdr": {
+    "tone": "consultivo_comercial",
+    "goal": "identificar perfil de compra ou locacao antes de handoff",
+    "collect_fields": ["nome", "telefone", "tipo_imovel", "regiao", "faixa_orcamento"],
+    "handoff_trigger": "intencao_clara_de_visita",
     "origin_label": "site_widget_imobiliaria_demo",
     "chat_title": "Consultor Imobiliario Demo",
     "opening_message": "Posso te ajudar a encontrar opcoes de acordo com seu perfil e orcamento.",
-    "input_placeholder": "Ex: Quero apartamento T2 para compra em Porto",
-    "collect_fields": ["nome", "telefone", "tipo_imovel", "regiao", "faixa_orcamento"]
+    "input_placeholder": "Ex: Quero apartamento T2 para compra em Porto"
   },
+  "form": {
+    "fields": [
+      { "name": "nome", "label": "Nome", "type": "text", "required": true },
+      { "name": "email", "label": "E-mail", "type": "email", "required": true },
+      { "name": "telefone", "label": "Telefone", "type": "tel", "required": true },
+      { "name": "tipo_imovel", "label": "Tipo de imovel", "type": "text", "required": true },
+      { "name": "regiao", "label": "Regiao desejada", "type": "text", "required": false },
+      { "name": "mensagem", "label": "Detalhes", "type": "textarea", "required": false }
+    ]
+  },
+  "faq": [
+    {
+      "question": "Posso configurar para locacao e compra no mesmo fluxo?",
+      "answer": "Sim. O template separa regras por segmento e por cliente."
+    },
+    {
+      "question": "Esse ambiente e de producao?",
+      "answer": "Nao. Este projeto esta marcado em modo demo."
+    }
+  ],
   "offers": [
     {
       "title": "Triagem de perfil imobiliario",
@@ -36,16 +64,6 @@
     {
       "title": "Pipeline comercial com contexto",
       "description": "Handoff com resumo para acelerar contato do corretor."
-    }
-  ],
-  "faq": [
-    {
-      "question": "Posso configurar para locacao e compra no mesmo fluxo?",
-      "answer": "Sim. O template separa regras por segmento e por cliente."
-    },
-    {
-      "question": "Esse ambiente e de producao?",
-      "answer": "Nao. Este projeto esta marcado em demo_mode para vitrine comercial."
     }
   ]
 }

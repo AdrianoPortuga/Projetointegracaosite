@@ -10,11 +10,7 @@ export function renderLeadForm(config) {
     return;
   }
 
-  const collectFields = Array.isArray(config?.sdr?.collect_fields) ? config.sdr.collect_fields : [];
-  const includePhone = collectFields.includes("telefone");
-  const dynamicFields = collectFields.filter(
-    (field) => !["nome", "email", "telefone", "mensagem"].includes(field)
-  );
+  const formFields = resolveFormFields(config);
 
   container.innerHTML = `
     <form class="lead-form" id="lead-form">
@@ -25,34 +21,7 @@ export function renderLeadForm(config) {
           : "Formulário conectado via configuração de lead routing."
       }</small>
       <div class="lead-form-grid">
-        <label>
-          Nome
-          <input type="text" name="nome" required />
-        </label>
-        <label>
-          E-mail
-          <input type="email" name="email" required />
-        </label>
-        ${
-          includePhone
-            ? `<label>
-                Telefone
-                <input type="tel" name="telefone" />
-              </label>`
-            : ""
-        }
-        ${dynamicFields
-          .map(
-            (field) => `<label>
-              ${toLabel(field)}
-              <input type="text" name="${field}" />
-            </label>`
-          )
-          .join("")}
-        <label class="lead-form-grid-full">
-          Mensagem
-          <textarea name="mensagem" rows="4"></textarea>
-        </label>
+        ${formFields.map((field) => renderField(field)).join("")}
       </div>
       <button type="submit">${config?.brand?.primary_cta || "Enviar"}</button>
       <small id="lead-form-status"></small>
@@ -111,4 +80,66 @@ function toLabel(field) {
   return String(field || "")
     .replaceAll("_", " ")
     .replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function renderField(field) {
+  const isTextarea = field.type === "textarea";
+  const className = field.fullWidth ? " class=\"lead-form-grid-full\"" : "";
+  const requiredAttr = field.required ? " required" : "";
+  const placeholder = field.placeholder ? ` placeholder=\"${escapeHtml(field.placeholder)}\"` : "";
+  const label = escapeHtml(field.label);
+  const name = escapeHtml(field.name);
+  const type = escapeHtml(field.type || "text");
+
+  if (isTextarea) {
+    return `<label${className}>${label}<textarea name="${name}" rows="4"${requiredAttr}${placeholder}></textarea></label>`;
+  }
+
+  return `<label${className}>${label}<input type="${type}" name="${name}"${requiredAttr}${placeholder} /></label>`;
+}
+
+function resolveFormFields(config) {
+  const explicit = Array.isArray(config?.form?.fields) ? config.form.fields : [];
+  if (explicit.length) {
+    return explicit.map((field) => ({
+      name: field.name,
+      label: field.label || toLabel(field.name),
+      type: field.type || "text",
+      required: Boolean(field.required),
+      placeholder: field.placeholder || "",
+      fullWidth: field.type === "textarea"
+    }));
+  }
+
+  const collectFields = Array.isArray(config?.sdr?.collect_fields) ? config.sdr.collect_fields : [];
+  const includes = new Set(collectFields);
+  const base = [
+    { name: "nome", label: "Nome", type: "text", required: true, placeholder: "" },
+    { name: "email", label: "E-mail", type: "email", required: true, placeholder: "" }
+  ];
+
+  if (includes.has("telefone")) {
+    base.push({ name: "telefone", label: "Telefone", type: "tel", required: false, placeholder: "" });
+  }
+
+  for (const field of collectFields) {
+    if (["nome", "email", "telefone", "mensagem"].includes(field)) continue;
+    base.push({
+      name: field,
+      label: toLabel(field),
+      type: "text",
+      required: false,
+      placeholder: ""
+    });
+  }
+
+  base.push({ name: "mensagem", label: "Mensagem", type: "textarea", required: false, placeholder: "", fullWidth: true });
+  return base;
+}
+
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
 }

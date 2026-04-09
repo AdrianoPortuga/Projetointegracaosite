@@ -1,0 +1,10 @@
+[
+  {
+    "question": "A triagem separa compra e locacao?",
+    "answer": "Sim. O fluxo identifica tipo de negocio, regiao e faixa de valor."
+  },
+  {
+    "question": "O corretor recebe os dados antes de ligar?",
+    "answer": "Sim. O handoff envia resumo com necessidade e prioridade."
+  }
+]

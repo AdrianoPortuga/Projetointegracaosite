@@ -1,0 +1,10 @@
+[
+  {
+    "question": "A triagem identifica interesse por modelo?",
+    "answer": "Sim. O fluxo captura modelo de interesse, orcamento e prazo de compra."
+  },
+  {
+    "question": "Posso usar para test-drive?",
+    "answer": "Sim. O handoff envia dados para o vendedor confirmar horario."
+  }
+]

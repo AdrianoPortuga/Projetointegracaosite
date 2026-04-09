@@ -1,0 +1,12 @@
+{
+  "trigger_mode": "intent_and_budget",
+  "auto_handoff_conditions": [
+    "pedido de test-drive",
+    "pedido de proposta",
+    "orcamento definido"
+  ],
+  "handoff_priority_map": {
+    "alta": "vendedor_resposta_15min",
+    "media": "vendedor_resposta_2h"
+  }
+}

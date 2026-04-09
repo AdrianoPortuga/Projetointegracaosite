@@ -1,0 +1,12 @@
+{
+  "trigger_mode": "score_or_intent",
+  "auto_handoff_conditions": [
+    "pedido explicito de proposta",
+    "urgencia alta",
+    "prazo processual informado"
+  ],
+  "handoff_priority_map": {
+    "alta": "atendimento_imediato",
+    "media": "atendimento_em_2h"
+  }
+}

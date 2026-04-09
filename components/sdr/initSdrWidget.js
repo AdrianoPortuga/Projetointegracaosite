@@ -1,8 +1,5 @@
 import { buildSdrPayload } from "../../utils/lead/sdrPayload.js";
-
-const STORAGE_VISITOR_ID = "codestech_sdr_visitor_id";
-const STORAGE_CONVERSATION_ID = "codestech_sdr_conversation_id";
-const STORAGE_STATE_SNAPSHOT = "codestech_sdr_state_snapshot";
+import { buildNamespace } from "../../utils/lead/namespace.js";
 
 export function initSdrWidget(config) {
   if (!config?.channels?.site_sdr_enabled) {
@@ -10,6 +7,12 @@ export function initSdrWidget(config) {
   }
 
   const sdrConfig = config.sdr || {};
+  const routingConfig = config.lead_routing || {};
+  const namespace = buildNamespace(config, "site_sdr");
+  const STORAGE_VISITOR_ID = `${namespace}:visitor_id`;
+  const STORAGE_CONVERSATION_ID = `${namespace}:conversation_id`;
+  const STORAGE_STATE_SNAPSHOT = `${namespace}:state_snapshot`;
+
   const state = {
     isOpen: false,
     isLoading: false,
@@ -151,7 +154,8 @@ export function initSdrWidget(config) {
     setLoading(elements, true);
 
     try {
-      const response = await fetch(`${state.apiBaseUrl}/sdr/chat`, {
+      const sdrEndpointPath = routingConfig.sdr_endpoint_path || "/sdr/chat";
+      const response = await fetch(`${state.apiBaseUrl}${sdrEndpointPath}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,0 +1,10 @@
+[
+  {
+    "question": "Quais areas juridicas sao atendidas?",
+    "answer": "Trabalhista, civel e consultoria empresarial."
+  },
+  {
+    "question": "O atendimento inicial ja e com advogado?",
+    "answer": "Nao. O SDR faz triagem e encaminha com contexto para o especialista."
+  }
+]

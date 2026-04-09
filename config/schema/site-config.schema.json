@@ -6,7 +6,7 @@
   "required": [
     "client_slug",
     "segment",
-    "demo_mode",
+    "operational_mode",
     "brand",
     "channels",
     "lead_routing",
@@ -17,6 +17,10 @@
   "properties": {
     "client_slug": { "type": "string", "minLength": 2 },
     "segment": { "type": "string", "minLength": 2 },
+    "operational_mode": {
+      "type": "string",
+      "enum": ["demo", "production"]
+    },
     "demo_mode": { "type": "boolean" },
     "brand": {
       "type": "object",
@@ -45,9 +49,32 @@
       "properties": {
         "telegram_enabled": { "type": "boolean" },
         "clickup_enabled": { "type": "boolean" },
+        "clickup_list_id": { "type": "string" },
+        "telegram_chat_id": { "type": "string" },
+        "sdr_endpoint_path": { "type": "string" },
         "form_endpoint_path": { "type": "string" },
         "form_origin_label": { "type": "string" },
-        "demo_allow_live_submit": { "type": "boolean" }
+        "demo_allow_live_submit": { "type": "boolean" },
+        "route_module": { "type": "string" }
+      }
+    },
+    "form": {
+      "type": "object",
+      "properties": {
+        "fields": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "label", "type", "required"],
+            "properties": {
+              "name": { "type": "string" },
+              "label": { "type": "string" },
+              "type": { "type": "string" },
+              "required": { "type": "boolean" },
+              "placeholder": { "type": "string" }
+            }
+          }
+        }
       }
     },
     "sdr": {
@@ -64,7 +91,14 @@
         "origin_label": { "type": "string" },
         "opening_message": { "type": "string" },
         "chat_title": { "type": "string" },
-        "input_placeholder": { "type": "string" }
+        "input_placeholder": { "type": "string" },
+        "knowledge_overrides": {
+          "type": "object",
+          "properties": {
+            "qualification_rules": { "type": "object" },
+            "handoff_rules": { "type": "object" }
+          }
+        }
       }
     },
     "faq": {

@@ -1,12 +1,11 @@
-# Codestech Template - Mostruario com SDR
+# Chat Atendimento Template - Operacional por Cliente
 
-Base plug-and-play para vitrines comerciais com:
+Base plug-and-play para onboarding real de clientes com:
 
-- landing orientada por JSON
-- SDR widget
-- formulario
-- tracking
-- handoff preparado para pipeline
+- site + SDR
+- formulario opcional
+- roteamento preparado para ClickUp e Telegram
+- base historica por cliente
 
 ## Estrutura
 
@@ -19,6 +18,14 @@ config/
   schema/
   segments/
   clients/
+knowledge/
+  clients/<client_slug>/
+    business_profile.json
+    faq.json
+    offers.json
+    qualification_rules.json
+    handoff_rules.json
+    change_log.md
 utils/
   tracking/
   lead/
@@ -27,63 +34,95 @@ scripts/
 api/
 ```
 
-## Resolucao do cliente ativo
+## Isolamento por cliente e canal
 
-Ordem de prioridade:
+- Namespace padrao: `<client_slug>::<segment>::<operational_mode>::<canal>`
+- Canais usados:
+  - `site_sdr`
+  - `form`
+  - `whatsapp` (futuro)
+- O widget SDR usa `localStorage` namespaced para nao misturar historico entre clientes.
 
-1. `SITE_CLIENT_SLUG` vindo de `/api/sdr-config` (env do Vercel)
-2. `meta[name="site-client-slug"]` em `index.html`
-3. `?client=` na URL (fallback tecnico de homologacao)
-4. fallback final: `advocacia-demo`
+## Resolucao de cliente ativo
 
-## Demo mode
+Prioridade:
 
-- `DEMO_MODE=true` (env) ou `demo_mode=true` no JSON do cliente.
-- Quando ativo:
-  - origem SDR e form saem com prefixo `DEMO_`
-  - payload inclui `demo_mode=true`
-  - form nao envia para endpoint real por padrao (`demo_allow_live_submit=false`)
+1. `SITE_CLIENT_SLUG` via `/api/sdr-config`
+2. `meta[name="site-client-slug"]`
+3. `?client=` (fallback tecnico)
+4. fallback final `advocacia-demo`
 
-## Demos prontas
+## Modo operacional
 
-- `advocacia-demo` (demo principal)
+- `operational_mode` em `config/clients/<slug>.json`: `demo` ou `production`
+- Pode ser sobrescrito por env `OPERATIONAL_MODE`
+- Compatibilidade: `DEMO_MODE=true` ainda funciona e vira `operational_mode=demo`
+
+Efeito em `demo`:
+
+- origem de SDR/form com prefixo `DEMO_`
+- payload inclui `demo_mode=true`
+- formulario nao envia para endpoint real por padrao (`demo_allow_live_submit=false`)
+
+## Roteamento por cliente/modulo
+
+Cada payload de SDR/form inclui:
+
+- `client_slug`
+- `segment`
+- `canal`
+- `operational_mode`
+- `site_origin`
+- `page_path`
+- `referrer`
+- `utm_source`, `utm_medium`, `utm_campaign`, `utm_content`, `utm_term`
+- `clickup_enabled`, `clickup_list_id`
+- `telegram_enabled`, `telegram_chat_id`
+- `route_module`
+
+## Clientes de exemplo prontos
+
+- `advocacia-demo`
 - `AgenciaCarro-demo`
 - `imobiliaria-demo`
 
-## Deploy no Vercel (3 projetos)
+Todos com:
 
-Sugestao de nomes:
+- config completa (`config/clients`)
+- knowledge base minima (`knowledge/clients/<slug>`)
+- flags de canais
+- roteamento preparado
 
-1. `codestech-demo-advocacia`
-2. `codestech-demo-agenciacarros`
-3. `codestech-demo-imobiliaria`
-
-Envs minimas para cada projeto:
-
-- `SDR_API_BASE_URL=https://leads-api.schoolia.online`
-- `SITE_CLIENT_SLUG=<slug do projeto>`
-- `DEMO_MODE=true`
-
-Mapeamento de `SITE_CLIENT_SLUG`:
-
-- `codestech-demo-advocacia` -> `advocacia-demo`
-- `codestech-demo-agenciacarros` -> `AgenciaCarro-demo`
-- `codestech-demo-imobiliaria` -> `imobiliaria-demo`
-
-## Criar novo cliente
+## Novo cliente (onboarding rapido)
 
 ```bash
-node scripts/create-client-config.mjs <client-slug> <segment>
+node scripts/create-client-config.mjs <client-slug> <segment> <demo|production>
 ```
 
-Depois:
+Exemplo:
 
-1. editar `config/clients/<client-slug>.json`
-2. garantir que o segmento existe em `config/segments`
-3. publicar em projeto Vercel com `SITE_CLIENT_SLUG=<client-slug>`
+```bash
+node scripts/create-client-config.mjs cliente-alpha advocacia production
+```
+
+Esse comando cria:
+
+1. `config/clients/<client-slug>.json`
+2. `knowledge/clients/<client-slug>/` com os 6 arquivos base
+
+## Envs de runtime (Vercel)
+
+- `SDR_API_BASE_URL=https://leads-api.schoolia.online`
+- `SITE_CLIENT_SLUG=advocacia-demo`
+- `OPERATIONAL_MODE=demo` (ou `production`)
+- `DEMO_MODE=true` (compatibilidade legada)
+
+## Modelo de entrega por modulo
+
+- Modelo 1: `site_sdr_enabled=true`, `form_enabled=false`
+- Modelo 2: `site_sdr_enabled=true`, `form_enabled=true`
+- Modelo 3: `site_sdr_enabled=true`, `form_enabled=true`, `whatsapp_enabled=true` (futuro)
 
 ## Schema
-
-Schema oficial:
 
 - `config/schema/site-config.schema.json`

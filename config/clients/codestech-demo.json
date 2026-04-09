@@ -1,40 +1,60 @@
 {
   "client_slug": "codestech-demo",
   "segment": "clinica_estetica",
-  "demo_mode": true,
+  "operational_mode": "demo",
   "brand": {
     "name": "Clinica Aurora",
     "headline": "Aumente suas consultas com atendimento comercial orientado por SDR",
-    "description": "Site-base com SDR, formulário e tracking para captar e qualificar pacientes.",
-    "primary_cta": "Quero acelerar minha captação",
+    "description": "Site-base com SDR, formulario e tracking para captar e qualificar pacientes.",
+    "primary_cta": "Quero acelerar minha captacao",
     "primary_cta_href": "#lead-form-container"
   },
   "channels": {
     "site_sdr_enabled": true,
     "form_enabled": true,
-    "whatsapp_enabled": true,
-    "whatsapp_number": "+351912345678"
+    "whatsapp_enabled": false,
+    "whatsapp_number": ""
   },
   "lead_routing": {
     "telegram_enabled": true,
-    "clickup_enabled": true
+    "clickup_enabled": true,
+    "clickup_list_id": "CLICKUP_LIST_DEMO_ESTETICA",
+    "telegram_chat_id": "TELEGRAM_CHAT_DEMO_ESTETICA",
+    "sdr_endpoint_path": "/sdr/chat",
+    "form_endpoint_path": "/leads/codesagency",
+    "form_origin_label": "site_form_codestech_demo",
+    "demo_allow_live_submit": false,
+    "route_module": "chat_atendimento"
   },
   "sdr": {
+    "tone": "consultivo_profissional",
+    "goal": "qualificar lead para consulta inicial",
+    "collect_fields": ["nome", "telefone", "procedimento_interesse", "urgencia"],
+    "handoff_trigger": "pedido_de_valor_ou_urgencia_alta",
     "origin_label": "site_widget_codestech_demo",
     "chat_title": "Consultora Virtual",
-    "opening_message": "Olá, posso te ajudar a entender qual tratamento e plano faz mais sentido para você.",
-    "input_placeholder": "Ex: Quero saber valores e prazos para harmonização"
+    "opening_message": "Ola, posso te ajudar a entender qual tratamento e plano faz mais sentido para voce.",
+    "input_placeholder": "Ex: Quero saber valores e prazos para harmonizacao"
+  },
+  "form": {
+    "fields": [
+      { "name": "nome", "label": "Nome", "type": "text", "required": true },
+      { "name": "email", "label": "E-mail", "type": "email", "required": true },
+      { "name": "telefone", "label": "Telefone", "type": "tel", "required": true },
+      { "name": "procedimento_interesse", "label": "Procedimento de interesse", "type": "text", "required": false },
+      { "name": "mensagem", "label": "Mensagem", "type": "textarea", "required": false }
+    ]
   },
   "faq": [
     {
       "question": "Vocês atendem primeira consulta sem compromisso?",
-      "answer": "Sim, nossa equipe orienta você sobre a melhor opção para o seu objetivo."
+      "answer": "Sim, nossa equipe orienta voce sobre a melhor opcao para o seu objetivo."
     }
   ],
   "offers": [
     {
-      "title": "Diagnóstico comercial em minutos",
-      "description": "SDR identifica o melhor próximo passo para seu caso."
+      "title": "Diagnostico comercial em minutos",
+      "description": "SDR identifica o melhor proximo passo para seu caso."
     }
   ]
 }

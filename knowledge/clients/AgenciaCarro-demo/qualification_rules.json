@@ -1,0 +1,13 @@
+{
+  "required_fields": ["nome", "telefone", "modelo_interesse"],
+  "priority_signals": [
+    "pedido de proposta imediata",
+    "pedido de test-drive",
+    "pagamento a vista"
+  ],
+  "discovery_questions": [
+    "Qual modelo ou categoria voce procura?",
+    "Qual faixa de orcamento prevista?",
+    "Quando pretende concluir a compra?"
+  ]
+}
