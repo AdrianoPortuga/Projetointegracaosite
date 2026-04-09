@@ -8,6 +8,10 @@ Base plug-and-play para onboarding real de clientes com:
 - base historica por cliente
 - proxy local para backend central
 
+Playbook operacional de implantação por cliente:
+
+- `docs/vercel-client-playbook.md`
+
 ## Estrutura
 
 ```text
@@ -141,6 +145,13 @@ Esse comando cria:
 - `SITE_CLIENT_SLUG=advocacia-demo`
 - `OPERATIONAL_MODE=demo` (ou `production`)
 - `DEMO_MODE=true` (compatibilidade legada)
+
+Descricao rapida das 4 envs oficiais:
+
+- `BACKEND_BASE_URL`: upstream central da Lead API para o proxy local.
+- `LEAD_API_TOKEN`: token server-side para `/api/lead/codesagency`.
+- `SITE_CLIENT_SLUG`: cliente ativo no projeto.
+- `OPERATIONAL_MODE`: define `demo` ou `production`.
 
 ## Modelo de entrega por modulo
 
