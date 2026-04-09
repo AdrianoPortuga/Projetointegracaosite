@@ -12,6 +12,7 @@ Playbook operacional de implantação por cliente:
 
 - `docs/vercel-client-playbook.md`
 - `docs/onboarding-agent-architecture.md`
+- `docs/onboarding-agent-mvp.md`
 
 ## Estrutura
 

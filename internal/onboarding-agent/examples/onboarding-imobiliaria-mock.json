@@ -1,0 +1,41 @@
+{
+  "client_slug": "onboarding-imobiliaria-mock",
+  "segment": "imobiliaria",
+  "operational_mode": "production",
+  "channels": {
+    "site_sdr_enabled": true,
+    "form_enabled": true,
+    "whatsapp_enabled": true
+  },
+  "brand": {
+    "name": "Vista Norte Imoveis",
+    "headline": "Mais visitas agendadas com triagem comercial",
+    "description": "Onboarding mock imobiliaria para validar pendencias de producao.",
+    "primary_cta": "Quero captar compradores",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "offers": [
+    {
+      "title": "Triagem de comprador e locatario",
+      "description": "Mapeia faixa de orcamento e regiao de interesse."
+    }
+  ],
+  "faq": [
+    {
+      "question": "O corretor recebe resumo antes do contato?",
+      "answer": "Sim. O handoff envia dados de perfil e intencao."
+    }
+  ],
+  "clickup_list_id": "",
+  "telegram_chat_id": "TELEGRAM_CHAT_MOCK_IMOB",
+  "uses_whatsbot": false,
+  "site_domain": "https://imobiliaria-mock.vercel.app",
+  "vercel_project_name": "codestech-imobiliaria-mock",
+  "sdr": {
+    "tone": "consultivo_comercial",
+    "goal": "identificar perfil de compra ou locacao",
+    "collect_fields": ["nome", "telefone", "tipo_imovel", "faixa_orcamento"],
+    "handoff_trigger": "interesse_em_visita"
+  }
+}
+

@@ -1,0 +1,52 @@
+{
+  "client_slug": "onboarding-advocacia-mock",
+  "segment": "advocacia",
+  "operational_mode": "demo",
+  "channels": {
+    "site_sdr_enabled": true,
+    "form_enabled": true,
+    "whatsapp_enabled": false
+  },
+  "brand": {
+    "name": "Ferreira e Lima Advogados",
+    "headline": "Capte casos qualificados com triagem digital",
+    "description": "Onboarding mock para validar pipeline do agente.",
+    "primary_cta": "Quero triagem juridica",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "offers": [
+    {
+      "title": "Triagem de casos trabalhistas",
+      "description": "Captura contexto inicial e urgencia para handoff humano."
+    },
+    {
+      "title": "Roteamento de prioridade",
+      "description": "Casos sensiveis seguem para fila prioritaria."
+    }
+  ],
+  "faq": [
+    {
+      "question": "A triagem substitui o advogado?",
+      "answer": "Nao. A triagem organiza o primeiro contato."
+    },
+    {
+      "question": "Posso personalizar perguntas?",
+      "answer": "Sim, com regras por cliente."
+    }
+  ],
+  "clickup_list_id": "CLICKUP_LIST_MOCK_ADV",
+  "telegram_chat_id": "TELEGRAM_CHAT_MOCK_ADV",
+  "uses_whatsbot": false,
+  "site_domain": "https://advocacia-mock.vercel.app",
+  "vercel_project_name": "codestech-advocacia-mock",
+  "sdr": {
+    "tone": "objetivo_reservado",
+    "goal": "qualificar caso juridico antes da equipe humana",
+    "collect_fields": ["nome", "telefone", "area_juridica", "urgencia"],
+    "handoff_trigger": "pedido_de_analise_juridica",
+    "chat_title": "Triagem Juridica Mock",
+    "opening_message": "Descreva seu caso para eu montar o melhor proximo passo.",
+    "input_placeholder": "Ex: Tenho duvida sobre rescisao trabalhista"
+  }
+}
+
