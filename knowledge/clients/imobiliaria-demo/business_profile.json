@@ -1,0 +1,18 @@
+{
+  "client_slug": "imobiliaria-demo",
+  "segment": "imobiliaria",
+  "business_name": "PrimeHome Imobiliaria",
+  "brand_name": "PrimeHome Imobiliaria",
+  "headline": "Triagem imobiliaria com resposta rapida para compra e locacao",
+  "primary_cta": "Quero leads imobiliarios",
+  "service_scope": [
+    "compra residencial",
+    "locacao residencial",
+    "investimento imobiliario"
+  ],
+  "target_region": "Portugal",
+  "differentials": [
+    "qualificacao por tipo de imovel e regiao",
+    "handoff para corretor com resumo"
+  ]
+}

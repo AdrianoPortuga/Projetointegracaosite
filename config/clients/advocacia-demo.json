@@ -1,7 +1,7 @@
 {
   "client_slug": "advocacia-demo",
   "segment": "advocacia",
-  "demo_mode": true,
+  "operational_mode": "demo",
   "brand": {
     "name": "Almeida e Torres Advocacia",
     "headline": "Seu escritorio com triagem digital para captar casos com mais velocidade",
@@ -12,32 +12,40 @@
   "channels": {
     "site_sdr_enabled": true,
     "form_enabled": true,
-    "whatsapp_enabled": true,
-    "whatsapp_number": "+351910000001"
+    "whatsapp_enabled": false,
+    "whatsapp_number": ""
   },
   "lead_routing": {
     "telegram_enabled": true,
     "clickup_enabled": true,
+    "clickup_list_id": "CLICKUP_LIST_DEMO_ADVOCACIA",
+    "telegram_chat_id": "TELEGRAM_CHAT_DEMO_ADVOCACIA",
+    "sdr_endpoint_path": "/sdr/chat",
+    "form_endpoint_path": "/leads/codesagency",
     "form_origin_label": "site_form_advocacia_demo",
-    "demo_allow_live_submit": false
+    "demo_allow_live_submit": false,
+    "route_module": "chat_atendimento"
   },
   "sdr": {
+    "tone": "objetivo_reservado",
+    "goal": "qualificar caso juridico antes do atendimento humano",
+    "collect_fields": ["nome", "telefone", "area_juridica", "urgencia", "cidade"],
+    "handoff_trigger": "pedido_de_analise_juridica",
     "origin_label": "site_widget_advocacia_demo",
     "chat_title": "Triagem Juridica Demo",
     "opening_message": "Ola. Posso coletar os pontos principais do seu caso para agilizar o atendimento.",
-    "input_placeholder": "Ex: Preciso de apoio em rescisao trabalhista",
-    "collect_fields": ["nome", "telefone", "area_juridica", "urgencia", "cidade"]
+    "input_placeholder": "Ex: Preciso de apoio em rescisao trabalhista"
   },
-  "offers": [
-    {
-      "title": "Triagem inicial com roteiro comercial",
-      "description": "Classifica area juridica e urgencia antes da equipe humana."
-    },
-    {
-      "title": "Handoff marcado como DEMO",
-      "description": "Fluxo de vitrine sem risco de contaminar a operacao final."
-    }
-  ],
+  "form": {
+    "fields": [
+      { "name": "nome", "label": "Nome", "type": "text", "required": true },
+      { "name": "email", "label": "E-mail", "type": "email", "required": true },
+      { "name": "telefone", "label": "Telefone", "type": "tel", "required": true },
+      { "name": "area_juridica", "label": "Area juridica", "type": "text", "required": true },
+      { "name": "urgencia", "label": "Nivel de urgencia", "type": "text", "required": false },
+      { "name": "mensagem", "label": "Resumo do caso", "type": "textarea", "required": false }
+    ]
+  },
   "faq": [
     {
       "question": "Este demo envia para atendimento real?",
@@ -46,6 +54,16 @@
     {
       "question": "Posso adaptar para meu escritorio?",
       "answer": "Sim. Basta duplicar o client_slug e ajustar branding e regras."
+    }
+  ],
+  "offers": [
+    {
+      "title": "Triagem inicial com roteiro comercial",
+      "description": "Classifica area juridica e urgencia antes da equipe humana."
+    },
+    {
+      "title": "Handoff marcado como DEMO",
+      "description": "Fluxo de vitrine sem risco de contaminar a operacao final."
     }
   ]
 }

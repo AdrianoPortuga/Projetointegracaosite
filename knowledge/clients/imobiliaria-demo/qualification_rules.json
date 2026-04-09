@@ -1,0 +1,13 @@
+{
+  "required_fields": ["nome", "telefone", "tipo_imovel"],
+  "priority_signals": [
+    "pedido de visita imediata",
+    "orcamento fechado",
+    "mudanca urgente"
+  ],
+  "discovery_questions": [
+    "Voce busca compra ou locacao?",
+    "Qual regiao de interesse?",
+    "Qual faixa de orcamento?"
+  ]
+}

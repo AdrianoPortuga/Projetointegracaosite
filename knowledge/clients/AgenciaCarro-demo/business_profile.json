@@ -1,0 +1,18 @@
+{
+  "client_slug": "AgenciaCarro-demo",
+  "segment": "agencia_carros",
+  "business_name": "NovaRota Automoveis",
+  "brand_name": "NovaRota Automoveis",
+  "headline": "Pre-venda consultiva para acelerar test-drive e proposta",
+  "primary_cta": "Quero vender mais carros",
+  "service_scope": [
+    "veiculos seminovos",
+    "proposta de financiamento",
+    "agendamento de test-drive"
+  ],
+  "target_region": "Portugal",
+  "differentials": [
+    "triagem por faixa de orcamento",
+    "handoff para vendedor com contexto"
+  ]
+}

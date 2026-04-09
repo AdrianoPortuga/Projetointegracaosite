@@ -1,0 +1,12 @@
+{
+  "trigger_mode": "intent_and_timing",
+  "auto_handoff_conditions": [
+    "pedido de visita",
+    "pedido de proposta",
+    "interesse em fechar rapido"
+  ],
+  "handoff_priority_map": {
+    "alta": "corretor_resposta_15min",
+    "media": "corretor_resposta_2h"
+  }
+}

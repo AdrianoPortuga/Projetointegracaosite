@@ -1,0 +1,10 @@
+[
+  {
+    "title": "Triagem juridica inicial",
+    "description": "Classifica area e urgencia antes do especialista assumir."
+  },
+  {
+    "title": "Handoff com resumo estruturado",
+    "description": "Equipe juridica recebe contexto com prioridade e dados de contato."
+  }
+]

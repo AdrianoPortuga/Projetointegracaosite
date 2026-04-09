@@ -1,0 +1,13 @@
+{
+  "required_fields": ["nome", "telefone", "area_juridica"],
+  "priority_signals": [
+    "prazo processual curto",
+    "pedido de consulta urgente",
+    "caso com risco financeiro imediato"
+  ],
+  "discovery_questions": [
+    "Qual area juridica descreve melhor seu caso?",
+    "Existe algum prazo critico em andamento?",
+    "Qual cidade e tribunal de referencia?"
+  ]
+}
