@@ -174,6 +174,7 @@ node scripts/smoke-homolog-almeida-torres.mjs
 
 - Checklist manual:
   - `docs/homologacao-almeida-torres-advocacia.md`
+  - `docs/vercel-preview-almeida-torres-advocacia.md`
 
 ## Schema
 
