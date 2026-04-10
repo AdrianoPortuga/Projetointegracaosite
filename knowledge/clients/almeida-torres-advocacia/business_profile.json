@@ -1,0 +1,18 @@
+{
+  "client_slug": "almeida-torres-advocacia",
+  "segment": "advocacia",
+  "business_name": "Almeida & Torres Advocacia",
+  "brand_name": "Almeida & Torres Advocacia",
+  "headline": "Triagem juridica inicial para acelerar atendimento de casos",
+  "primary_cta": "Quero avaliar meu caso agora",
+  "service_scope": [
+    "direito_trabalhista",
+    "direito_civil",
+    "consultoria_empresarial"
+  ],
+  "target_region": "Lisboa e Porto",
+  "differentials": [
+    "Resposta inicial em poucos minutos",
+    "Qualificacao juridica antes do atendimento humano"
+  ]
+}

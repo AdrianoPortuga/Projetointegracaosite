@@ -1,0 +1,102 @@
+{
+  "client_slug": "almeida-torres-advocacia",
+  "segment": "advocacia",
+  "operational_mode": "demo",
+  "demo_mode": true,
+  "brand": {
+    "name": "Almeida & Torres Advocacia",
+    "headline": "Triagem juridica inicial para acelerar atendimento de casos",
+    "description": "Pessoas fisicas e pequenas empresas com demandas juridicas urgentes ou recorrentes.",
+    "primary_cta": "Quero avaliar meu caso agora",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "channels": {
+    "site_sdr_enabled": true,
+    "form_enabled": true,
+    "whatsapp_enabled": false,
+    "whatsapp_number": ""
+  },
+  "lead_routing": {
+    "telegram_enabled": false,
+    "clickup_enabled": true,
+    "clickup_list_id": "CLICKUP_LIST_HOMOLOG_ADVOCACIA",
+    "telegram_chat_id": "",
+    "sdr_endpoint_path": "/api/sdr/chat",
+    "form_endpoint_path": "/api/lead/codesagency",
+    "form_origin_label": "site_form_almeida-torres-advocacia",
+    "demo_allow_live_submit": true,
+    "route_module": "atendimento_advocacia"
+  },
+  "sdr": {
+    "tone": "consultivo_comercial",
+    "goal": "Triagem juridica inicial para acelerar atendimento de casos",
+    "collect_fields": [
+      "nome",
+      "telefone",
+      "area_juridica",
+      "urgencia",
+      "cidade"
+    ],
+    "handoff_trigger": "pedido_de_analise_juridica",
+    "origin_label": "site_widget_almeida-torres-advocacia",
+    "chat_title": "Almeida & Torres Advocacia - Triagem",
+    "opening_message": "Descreva seu caso e eu preparo o melhor proximo passo para a equipe juridica.",
+    "input_placeholder": "Ex: Preciso de orientacao sobre rescisao trabalhista"
+  },
+  "form": {
+    "fields": [
+      {
+        "name": "nome",
+        "label": "Nome",
+        "type": "text",
+        "required": true
+      },
+      {
+        "name": "email",
+        "label": "E-mail",
+        "type": "email",
+        "required": true
+      },
+      {
+        "name": "telefone",
+        "label": "Telefone",
+        "type": "tel",
+        "required": true
+      },
+      {
+        "name": "mensagem",
+        "label": "Mensagem",
+        "type": "textarea",
+        "required": false
+      }
+    ]
+  },
+  "faq": [
+    {
+      "question": "A triagem substitui consulta juridica?",
+      "answer": "Nao. A triagem organiza dados iniciais para o advogado"
+    },
+    {
+      "question": "Quanto tempo para retorno humano?",
+      "answer": "Casos urgentes recebem retorno prioritario"
+    }
+  ],
+  "offers": [
+    {
+      "title": "Triagem juridica inicial para acelerar atendimento de casos",
+      "description": "Oferta principal"
+    },
+    {
+      "title": "Direito Trabalhista",
+      "description": "Triagem de casos e priorizacao por urgencia"
+    },
+    {
+      "title": "Direito Civil",
+      "description": "Organizacao do contexto inicial para atendimento humano"
+    },
+    {
+      "title": "Consultoria Empresarial",
+      "description": "Captacao de demandas empresariais com qualificacao"
+    }
+  ]
+}

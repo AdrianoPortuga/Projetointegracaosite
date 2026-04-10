@@ -114,6 +114,7 @@ Cada payload de SDR/form inclui:
 - `advocacia-demo`
 - `AgenciaCarro-demo`
 - `imobiliaria-demo`
+- `almeida-torres-advocacia` (homologacao controlada)
 
 Todos com:
 
@@ -160,6 +161,20 @@ Descricao rapida das 4 envs oficiais:
 - Modelo 1: `site_sdr_enabled=true`, `form_enabled=false`
 - Modelo 2: `site_sdr_enabled=true`, `form_enabled=true`
 - Modelo 3: `site_sdr_enabled=true`, `form_enabled=true`, `whatsapp_enabled=true` (futuro)
+
+## Homologacao do cliente Almeida & Torres
+
+- Pagina dedicada de homologacao:
+  - `/clients/almeida-torres-advocacia/`
+- Smoke test tecnico:
+
+```bash
+node scripts/smoke-homolog-almeida-torres.mjs
+```
+
+- Checklist manual:
+  - `docs/homologacao-almeida-torres-advocacia.md`
+  - `docs/vercel-preview-almeida-torres-advocacia.md`
 
 ## Schema
 

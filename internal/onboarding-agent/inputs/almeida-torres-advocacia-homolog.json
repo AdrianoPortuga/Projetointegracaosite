@@ -1,0 +1,76 @@
+{
+  "client_slug": "almeida-torres-advocacia",
+  "segment": "advocacia",
+  "operational_mode": "demo",
+  "channels": {
+    "site_sdr_enabled": true,
+    "form_enabled": true,
+    "whatsapp_enabled": false
+  },
+  "brand": {
+    "name": "Almeida & Torres Advocacia",
+    "headline": "Triagem juridica inicial para acelerar atendimento de casos",
+    "description": "Pessoas fisicas e pequenas empresas com demandas juridicas urgentes ou recorrentes.",
+    "primary_cta": "Quero avaliar meu caso agora",
+    "primary_cta_href": "#lead-form-container"
+  },
+  "offers": [
+    {
+      "title": "Triagem juridica inicial para acelerar atendimento de casos",
+      "description": "Oferta principal"
+    },
+    {
+      "title": "Direito Trabalhista",
+      "description": "Triagem de casos e priorizacao por urgencia"
+    },
+    {
+      "title": "Direito Civil",
+      "description": "Organizacao do contexto inicial para atendimento humano"
+    },
+    {
+      "title": "Consultoria Empresarial",
+      "description": "Captacao de demandas empresariais com qualificacao"
+    }
+  ],
+  "faq": [
+    {
+      "question": "A triagem substitui consulta juridica?",
+      "answer": "Nao. A triagem organiza dados iniciais para o advogado"
+    },
+    {
+      "question": "Quanto tempo para retorno humano?",
+      "answer": "Casos urgentes recebem retorno prioritario"
+    }
+  ],
+  "clickup_list_id": "CLICKUP_LIST_HOMOLOG_ADVOCACIA",
+  "telegram_chat_id": "",
+  "uses_whatsbot": false,
+  "site_domain": "https://homolog-almeida-torres.vercel.app",
+  "vercel_project_name": "codestech-homolog-almeida-torres",
+  "sdr": {
+    "tone": "consultivo_comercial",
+    "goal": "Triagem juridica inicial para acelerar atendimento de casos",
+    "collect_fields": [
+      "nome",
+      "telefone",
+      "area_juridica",
+      "urgencia",
+      "cidade"
+    ],
+    "handoff_trigger": "pedido_de_analise_juridica",
+    "chat_title": "Almeida & Torres Advocacia - Triagem",
+    "opening_message": "Descreva seu caso e eu preparo o melhor proximo passo para a equipe juridica.",
+    "input_placeholder": "Ex: Preciso de orientacao sobre rescisao trabalhista"
+  },
+  "target_region": "Lisboa e Porto",
+  "differentials": [
+    "Resposta inicial em poucos minutos",
+    "Qualificacao juridica antes do atendimento humano"
+  ],
+  "service_scope": [
+    "direito_trabalhista",
+    "direito_civil",
+    "consultoria_empresarial"
+  ]
+}
+

@@ -1,0 +1,11 @@
+{
+  "required_fields": [
+    "nome",
+    "telefone",
+    "area_juridica",
+    "urgencia",
+    "cidade"
+  ],
+  "priority_signals": [],
+  "discovery_questions": []
+}
