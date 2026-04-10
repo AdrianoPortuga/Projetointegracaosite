@@ -15,7 +15,7 @@
   "lead_routing": {
     "telegram_enabled": true,
     "clickup_enabled": true,
-    "form_endpoint_path": "/leads/codesagency",
+    "form_endpoint_path": "/api/lead/codesagency",
     "form_origin_label": "site_form_advocacia",
     "demo_allow_live_submit": false
   },

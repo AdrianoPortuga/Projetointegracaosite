@@ -6,6 +6,13 @@ Base plug-and-play para onboarding real de clientes com:
 - formulario opcional
 - roteamento preparado para ClickUp e Telegram
 - base historica por cliente
+- proxy local para backend central
+
+Playbook operacional de implantação por cliente:
+
+- `docs/vercel-client-playbook.md`
+- `docs/onboarding-agent-architecture.md`
+- `docs/onboarding-agent-mvp.md`
 
 ## Estrutura
 
@@ -33,6 +40,23 @@ utils/
 scripts/
 api/
 ```
+
+## Proxy local (mesmo dominio do cliente)
+
+O browser nao chama mais diretamente a API externa.
+
+Rotas locais:
+
+- `POST /api/sdr/chat`
+- `POST /api/lead/codesagency`
+
+Essas rotas fazem proxy para o backend central configurado em env.
+
+Arquivos:
+
+- `api/_lib/proxy.js`
+- `api/sdr/chat.js`
+- `api/lead/codesagency.js`
 
 ## Isolamento por cliente e canal
 
@@ -80,6 +104,11 @@ Cada payload de SDR/form inclui:
 - `telegram_enabled`, `telegram_chat_id`
 - `route_module`
 
+## Rotas usadas no frontend
+
+- SDR -> `lead_routing.sdr_endpoint_path` (padrao: `/api/sdr/chat`)
+- Form -> `lead_routing.form_endpoint_path` (padrao: `/api/lead/codesagency`)
+
 ## Clientes de exemplo prontos
 
 - `advocacia-demo`
@@ -112,10 +141,19 @@ Esse comando cria:
 
 ## Envs de runtime (Vercel)
 
-- `SDR_API_BASE_URL=https://leads-api.schoolia.online`
+- `BACKEND_BASE_URL=https://leads-api.schoolia.online`
+- `SDR_API_BASE_URL=https://leads-api.schoolia.online` (compatibilidade)
+- `LEAD_API_TOKEN=<token server-side para /lead/codesagency>`
 - `SITE_CLIENT_SLUG=advocacia-demo`
 - `OPERATIONAL_MODE=demo` (ou `production`)
 - `DEMO_MODE=true` (compatibilidade legada)
+
+Descricao rapida das 4 envs oficiais:
+
+- `BACKEND_BASE_URL`: upstream central da Lead API para o proxy local.
+- `LEAD_API_TOKEN`: token server-side para `/api/lead/codesagency`.
+- `SITE_CLIENT_SLUG`: cliente ativo no projeto.
+- `OPERATIONAL_MODE`: define `demo` ou `production`.
 
 ## Modelo de entrega por modulo
 

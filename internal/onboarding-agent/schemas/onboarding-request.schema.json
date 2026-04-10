@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://codestech.pt/schemas/onboarding-request.schema.json",
+  "title": "Codestech Onboarding Request",
+  "type": "object",
+  "required": [
+    "client_slug",
+    "segment",
+    "operational_mode",
+    "channels",
+    "brand",
+    "offers",
+    "faq",
+    "clickup_list_id",
+    "telegram_chat_id",
+    "uses_whatsbot",
+    "site_domain",
+    "vercel_project_name"
+  ],
+  "properties": {
+    "client_slug": { "type": "string", "minLength": 3 },
+    "segment": { "type": "string", "minLength": 3 },
+    "operational_mode": { "type": "string", "enum": ["demo", "production"] },
+    "channels": {
+      "type": "object",
+      "required": ["site_sdr_enabled", "form_enabled", "whatsapp_enabled"],
+      "properties": {
+        "site_sdr_enabled": { "type": "boolean" },
+        "form_enabled": { "type": "boolean" },
+        "whatsapp_enabled": { "type": "boolean" }
+      }
+    },
+    "brand": {
+      "type": "object",
+      "required": ["name", "headline", "primary_cta"],
+      "properties": {
+        "name": { "type": "string" },
+        "headline": { "type": "string" },
+        "description": { "type": "string" },
+        "primary_cta": { "type": "string" },
+        "primary_cta_href": { "type": "string" }
+      }
+    },
+    "offers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "description"],
+        "properties": {
+          "title": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "faq": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["question", "answer"],
+        "properties": {
+          "question": { "type": "string" },
+          "answer": { "type": "string" }
+        }
+      }
+    },
+    "clickup_list_id": { "type": "string" },
+    "telegram_chat_id": { "type": "string" },
+    "uses_whatsbot": { "type": "boolean" },
+    "site_domain": { "type": "string" },
+    "vercel_project_name": { "type": "string" },
+    "sdr": {
+      "type": "object",
+      "properties": {
+        "tone": { "type": "string" },
+        "goal": { "type": "string" },
+        "collect_fields": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "handoff_trigger": { "type": "string" }
+      }
+    }
+  }
+}

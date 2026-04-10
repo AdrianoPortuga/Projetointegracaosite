@@ -44,7 +44,9 @@ async function fetchRuntimeConfig() {
     if (!response.ok) return {};
     const data = await response.json();
     return {
-      apiBaseUrl: String(data.apiBaseUrl || "").trim() || null,
+      localApiBaseUrl: String(data.localApiBaseUrl || "").trim() || "/api",
+      proxyEnabled: Boolean(data.proxyEnabled),
+      backendConfigured: Boolean(data.backendConfigured),
       siteClientSlug: String(data.siteClientSlug || "").trim() || null,
       demoMode: typeof data.demoMode === "boolean" ? data.demoMode : null,
       operationalMode: String(data.operationalMode || "").trim() || null
@@ -169,7 +171,9 @@ export async function loadSiteConfig() {
   window.__SITE_CONFIG__ = merged;
   window.__SDR_WIDGET_CONFIG__ = {
     ...(window.__SDR_WIDGET_CONFIG__ || {}),
-    apiBaseUrl: runtimeConfig.apiBaseUrl || null
+    apiBaseUrl: runtimeConfig.localApiBaseUrl || "/api",
+    proxyEnabled: runtimeConfig.proxyEnabled !== false,
+    backendConfigured: runtimeConfig.backendConfigured !== false
   };
 
   return merged;

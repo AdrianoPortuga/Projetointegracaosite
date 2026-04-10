@@ -46,8 +46,8 @@ const configPayload = {
     clickup_enabled: true,
     clickup_list_id: "CLICKUP_LIST_ID",
     telegram_chat_id: "TELEGRAM_CHAT_ID",
-    sdr_endpoint_path: "/sdr/chat",
-    form_endpoint_path: "/leads/codesagency",
+    sdr_endpoint_path: "/api/sdr/chat",
+    form_endpoint_path: "/api/lead/codesagency",
     form_origin_label: `site_form_${clientSlug}`,
     demo_allow_live_submit: false,
     route_module: "chat_atendimento"
