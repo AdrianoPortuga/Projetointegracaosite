@@ -139,7 +139,7 @@ export function initSdrWidget(config) {
 
     const visitorId = getOrCreateId(STORAGE_VISITOR_ID, "visitor");
     const conversationId = getOrCreateId(STORAGE_CONVERSATION_ID, "conv");
-    const stateSnapshot = readStateSnapshot();
+    const stateSnapshot = readStateSnapshot(STORAGE_STATE_SNAPSHOT);
     const payload = buildSdrPayload({
       message: cleanText,
       conversationId,
@@ -170,7 +170,7 @@ export function initSdrWidget(config) {
       }
 
       const data = await response.json();
-      writeStateSnapshot(data.state);
+      writeStateSnapshot(STORAGE_STATE_SNAPSHOT, data.state);
 
       const shouldClose = Boolean(data.chat_closed || data.handoff_dispatched);
       state.chatClosed = shouldClose;
@@ -231,9 +231,9 @@ function getOrCreateId(storageKey, prefix) {
   return generated;
 }
 
-function readStateSnapshot() {
+function readStateSnapshot(storageKey) {
   try {
-    const raw = window.localStorage.getItem(STORAGE_STATE_SNAPSHOT);
+    const raw = window.localStorage.getItem(storageKey);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     return parsed && typeof parsed === "object" ? parsed : null;
@@ -242,10 +242,10 @@ function readStateSnapshot() {
   }
 }
 
-function writeStateSnapshot(snapshot) {
+function writeStateSnapshot(storageKey, snapshot) {
   if (!snapshot || typeof snapshot !== "object") return;
   try {
-    window.localStorage.setItem(STORAGE_STATE_SNAPSHOT, JSON.stringify(snapshot));
+    window.localStorage.setItem(storageKey, JSON.stringify(snapshot));
   } catch {
     // ignore storage errors
   }
