@@ -45,6 +45,12 @@ Apply (somente com aprovacao humana explicita):
 node internal/onboarding-agent/run.mjs --input internal/onboarding-agent/examples/onboarding-advocacia-mock.json --mode apply --approved
 ```
 
+Provisionamento de Preview no Vercel (dry-run recomendado):
+
+```bash
+node internal/onboarding-agent/scripts/provision-vercel-preview.mjs --client-slug almeida-torres-advocacia --dry-run
+```
+
 Comportamento do gate:
 
 - `apply` sem `--approved` => bloqueado (NO-GO)
@@ -70,3 +76,9 @@ Cada execucao gera:
 - gate humano para `apply`
 - shape minimo esperado do payload operacional
 
+## Rotina Vercel Provisioning
+
+Documentacao:
+
+- `internal/onboarding-agent/docs/vercel-provisioning.md`
+- `internal/onboarding-agent/.env.vercel-preview.example`
