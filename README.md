@@ -49,6 +49,8 @@ Rotas locais:
 
 - `POST /api/sdr/chat`
 - `POST /api/lead/codesagency`
+- `POST /api/voice/token`
+- `POST /api/voice/tts`
 
 Essas rotas fazem proxy para o backend central configurado em env.
 
@@ -148,6 +150,8 @@ Esse comando cria:
 - `SITE_CLIENT_SLUG=advocacia-demo`
 - `OPERATIONAL_MODE=demo` (ou `production`)
 - `DEMO_MODE=true` (compatibilidade legada)
+- `AZURE_SPEECH_KEY=<chave do Azure Speech>`
+- `AZURE_SPEECH_REGION=<regiao do Azure Speech>`
 
 Descricao rapida das 4 envs oficiais:
 
