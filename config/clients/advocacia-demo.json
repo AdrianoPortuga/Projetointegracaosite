@@ -34,7 +34,55 @@
     "origin_label": "site_widget_advocacia_demo",
     "chat_title": "Triagem Juridica Demo",
     "opening_message": "Ola. Posso coletar os pontos principais do seu caso para agilizar o atendimento.",
-    "input_placeholder": "Ex: Preciso de apoio em rescisao trabalhista"
+    "input_placeholder": "Ex: Preciso de apoio em rescisao trabalhista",
+    "conversation_panel": {
+      "badge": "Piloto",
+      "title": "Advocacia SDR Voz - Atendimento",
+      "subtitle": "Triagem inicial em texto com estrutura pronta para voz premium.",
+      "assistant_title": "Assistente de triagem juridica",
+      "opening_message": "Ola, eu sou a Dora e vou fazer a triagem inicial do seu atendimento juridico. Pode escolher escrever agora ou usar voz premium quando estiver disponivel.",
+      "primary_mic_label": "Iniciar microfone (voz premium)",
+      "alternate_text_label": "Prefiro escrever",
+      "voice_ready_message": "Modo voz premium preparado. Integracao com Azure STT/TTS sera conectada na proxima etapa.",
+      "listen_reply_label": "Ouvir resposta (TTS - preparado)",
+      "tts_ready_message": "Ponto de integracao pronto para TTS. A resposta da Dora podera ser lida em voz na proxima etapa.",
+      "status_title": "Status da conversa",
+      "channel_active_label": "Canal ativo",
+      "handoff_section_title": "Dados para encaminhamento",
+      "name_label": "Nome",
+      "name_placeholder": "Nome do cliente",
+      "contact_label": "Contacto",
+      "contact_placeholder": "Telefone ou email",
+      "classification_label": "Area juridica",
+      "classification_summary_label": "Area juridica",
+      "classification_options": [
+        { "value": "imigracao", "label": "Imigracao" },
+        { "value": "trabalho", "label": "Trabalho" },
+        { "value": "arrendamento_imobiliario", "label": "Arrendamento/Imobiliario" },
+        { "value": "outro", "label": "Outro" }
+      ],
+      "urgency_label": "Urgencia",
+      "summary_title": "Resumo estruturado do caso",
+      "payload_title": "Payload pronto para ClickUp",
+      "input_label": "Mensagem (texto ou transcricao STT futura)",
+      "input_placeholder": "Descreva seu caso para a triagem inicial...",
+      "send_label": "Enviar mensagem",
+      "confirm_label": "Confirmar envio",
+      "payload_ready_message": "Triagem consolidada. Payload pronto para envio ao ClickUp.",
+      "fallback_reply": "Recebi sua mensagem e vou seguir com a triagem inicial.",
+      "error_message": "Nao consegui processar agora. Posso tentar novamente em alguns segundos?",
+      "closed_message": "Perfeito. Seu pedido foi enviado com prioridade.\nNossa equipa continua o atendimento pelos canais informados.",
+      "typing_message": "Dora esta a responder...",
+      "main_report_label": "Relato principal",
+      "payload_keys": {
+        "classification": "area_juridica",
+        "summary": "resumo_caso",
+        "transcript": "conversa_texto"
+      },
+      "metadata_source": "advocacia_demo_voice_panel",
+      "security_phrase": "Posso fazer a triagem inicial e encaminhar seu caso para a equipa. A analise juridica final sera feita pelo profissional responsavel.",
+      "security_terms": ["violencia", "abuso", "agressao", "deport", "expuls", "despejo", "ameaca", "urgente"]
+    }
   },
   "form": {
     "fields": [
