@@ -1,13 +1,21 @@
 import { buildSdrPayload } from "../../utils/lead/sdrPayload.js";
 import { buildNamespace } from "../../utils/lead/namespace.js";
 
+const DEFAULT_URGENCY_OPTIONS = [
+  { value: "baixa", label: "Baixa" },
+  { value: "media", label: "Media" },
+  { value: "alta", label: "Alta" }
+];
+
+const LEGAL_SENSITIVE_TERMS = ["violencia", "abuso", "agressao", "deport", "expuls", "despejo", "amea", "urgente"];
+
 export function initSdrWidget(config) {
   if (!config?.channels?.site_sdr_enabled) {
     return;
   }
 
-  const sdrConfig = config.sdr || {};
   const routingConfig = config.lead_routing || {};
+  const panelCopy = resolvePanelCopy(config);
   const namespace = buildNamespace(config, "site_sdr");
   const STORAGE_VISITOR_ID = `${namespace}:visitor_id`;
   const STORAGE_CONVERSATION_ID = `${namespace}:conversation_id`;
@@ -19,11 +27,19 @@ export function initSdrWidget(config) {
     chatClosed: false,
     apiBaseUrl: (window.__SDR_WIDGET_CONFIG__?.apiBaseUrl || "/api").replace(/\/+$/, ""),
     apiReady: true,
-    messages: []
+    messages: [],
+    caseData: {
+      nome: "",
+      contacto: "",
+      classification: panelCopy.classificationOptions[0]?.value || "outro",
+      urgencia: "media",
+      canal: "texto"
+    }
   };
 
-  const ui = buildUi(config);
+  const ui = buildUi(config, panelCopy);
   wireEvents(ui);
+  updateStructuredPreview(ui);
 
   if (!state.apiReady) {
     ui.status.textContent = "Widget ativo, mas proxy local indisponivel.";
@@ -31,7 +47,7 @@ export function initSdrWidget(config) {
     ui.input.disabled = true;
   }
 
-  function buildUi(siteConfig) {
+  function buildUi(siteConfig, copy) {
     const button = document.createElement("button");
     button.id = "sdr-widget-button";
     button.type = "button";
@@ -41,30 +57,52 @@ export function initSdrWidget(config) {
     panel.id = "sdr-widget-panel";
     panel.setAttribute("data-open", "false");
 
-    const title = siteConfig?.sdr?.chat_title || "SDR Virtual";
-    const focus = sdrConfig.goal || "qualificacao_comercial";
+    const title = copy.title;
     const modeTag = siteConfig?.demo_mode ? " [DEMO]" : "";
-    const placeholder = siteConfig?.sdr?.input_placeholder || "Digite sua necessidade comercial";
-    const sendLabel = siteConfig?.sdr?.send_button_label || "Enviar";
     const closeLabel = siteConfig?.sdr?.new_chat_button_label || "Nova conversa";
 
     panel.innerHTML = [
       '<header id="sdr-widget-header">',
-      `${title}${modeTag}`,
-      `<p id="sdr-widget-focus">Foco atual: ${focus}</p>`,
+      `<div><span class="sdr-kicker">${escapeHtml(copy.badge)}</span><h2>${escapeHtml(title)}${modeTag}</h2><p>${escapeHtml(copy.subtitle)}</p></div>`,
       "</header>",
-      '<div id="sdr-widget-messages"></div>',
-      '<footer id="sdr-widget-footer">',
-      '<form id="sdr-widget-form">',
-      `<input id="sdr-widget-input" type="text" placeholder="${escapeHtml(placeholder)}" autocomplete="off" />`,
-      `<button id="sdr-widget-submit" type="submit">${escapeHtml(sendLabel)}</button>`,
-      "</form>",
-      '<p id="sdr-widget-status"></p>',
-      '<div id="sdr-widget-meta" data-closed="false">',
-      `<span id="sdr-widget-closed-text">${escapeHtml(siteConfig?.sdr?.handoff_done_message || "Solicitacao enviada com sucesso.")}</span>`,
-      `<button id="sdr-widget-reset" type="button">${escapeHtml(closeLabel)}</button>`,
+      '<div id="sdr-widget-shell">',
+      '<section id="sdr-widget-left">',
+      `<article class="sdr-assistant-card"><span class="sdr-mini-label">Dora</span><strong>${escapeHtml(copy.assistantTitle)}</strong><p>${escapeHtml(copy.openingMessage)}</p></article>`,
+      '<div class="sdr-action-group">',
+      `<button id="sdr-widget-mic" type="button">${escapeHtml(copy.primaryMicLabel)}</button>`,
+      `<button id="sdr-widget-write" type="button">${escapeHtml(copy.alternateTextLabel)}</button>`,
       "</div>",
-      "</footer>"
+      `<article class="sdr-status-card"><span class="sdr-mini-label">${escapeHtml(copy.statusTitle)}</span><strong id="sdr-widget-status-label">Pronto</strong><p id="sdr-widget-channel-label">${escapeHtml(copy.channelActiveLabel)}: Texto</p><p id="sdr-widget-status"></p></article>`,
+      `<button id="sdr-widget-tts" type="button">${escapeHtml(copy.listenReplyLabel)}</button>`,
+      '<section class="sdr-structured-card">',
+      `<span class="sdr-mini-label">${escapeHtml(copy.handoffSectionTitle)}</span>`,
+      `<label>${escapeHtml(copy.nameLabel)}<input id="sdr-widget-name" type="text" placeholder="${escapeHtml(copy.namePlaceholder)}" /></label>`,
+      `<label>${escapeHtml(copy.contactLabel)}<input id="sdr-widget-contact" type="text" placeholder="${escapeHtml(copy.contactPlaceholder)}" /></label>`,
+      `<label>${escapeHtml(copy.classificationLabel)}<select id="sdr-widget-classification">${copy.classificationOptions
+        .map((option) => `<option value="${escapeHtml(option.value)}">${escapeHtml(option.label)}</option>`)
+        .join("")}</select></label>`,
+      `<label>${escapeHtml(copy.urgencyLabel)}<select id="sdr-widget-urgency">${DEFAULT_URGENCY_OPTIONS.map(
+        (option) => `<option value="${escapeHtml(option.value)}">${escapeHtml(option.label)}</option>`
+      ).join("")}</select></label>`,
+      "</section>",
+      `<div id="sdr-widget-meta" data-closed="false"><span id="sdr-widget-closed-text">${escapeHtml(copy.closedMessage)}</span><button id="sdr-widget-reset" type="button">${escapeHtml(closeLabel)}</button></div>`,
+      "</section>",
+      '<section id="sdr-widget-right">',
+      '<div id="sdr-widget-messages"></div>',
+      '<div id="sdr-widget-composer">',
+      `<label for="sdr-widget-input">${escapeHtml(copy.inputLabel)}</label>`,
+      `<textarea id="sdr-widget-input" rows="4" placeholder="${escapeHtml(copy.inputPlaceholder)}"></textarea>`,
+      '<div class="sdr-composer-actions">',
+      `<button id="sdr-widget-submit" type="button">${escapeHtml(copy.sendLabel)}</button>`,
+      `<button id="sdr-widget-confirm" type="button">${escapeHtml(copy.confirmLabel)}</button>`,
+      "</div>",
+      "</div>",
+      '<div class="sdr-preview-grid">',
+      `<article class="sdr-preview-card"><span class="sdr-mini-label">${escapeHtml(copy.summaryTitle)}</span><pre id="sdr-widget-summary">Ainda nao gerado.</pre></article>`,
+      `<article class="sdr-preview-card"><span class="sdr-mini-label">${escapeHtml(copy.payloadTitle)}</span><pre id="sdr-widget-payload">Aguardando confirmacao de envio.</pre></article>`,
+      "</div>",
+      "</section>",
+      "</div>"
     ].join("");
 
     document.body.appendChild(button);
@@ -73,13 +111,25 @@ export function initSdrWidget(config) {
     return {
       button,
       panel,
+      copy,
       messages: panel.querySelector("#sdr-widget-messages"),
-      form: panel.querySelector("#sdr-widget-form"),
       input: panel.querySelector("#sdr-widget-input"),
       submit: panel.querySelector("#sdr-widget-submit"),
+      confirm: panel.querySelector("#sdr-widget-confirm"),
       status: panel.querySelector("#sdr-widget-status"),
+      statusLabel: panel.querySelector("#sdr-widget-status-label"),
+      channelLabel: panel.querySelector("#sdr-widget-channel-label"),
+      summary: panel.querySelector("#sdr-widget-summary"),
+      payload: panel.querySelector("#sdr-widget-payload"),
       meta: panel.querySelector("#sdr-widget-meta"),
-      reset: panel.querySelector("#sdr-widget-reset")
+      reset: panel.querySelector("#sdr-widget-reset"),
+      mic: panel.querySelector("#sdr-widget-mic"),
+      write: panel.querySelector("#sdr-widget-write"),
+      tts: panel.querySelector("#sdr-widget-tts"),
+      name: panel.querySelector("#sdr-widget-name"),
+      contact: panel.querySelector("#sdr-widget-contact"),
+      classification: panel.querySelector("#sdr-widget-classification"),
+      urgency: panel.querySelector("#sdr-widget-urgency")
     };
   }
 
@@ -88,27 +138,46 @@ export function initSdrWidget(config) {
       state.isOpen = !state.isOpen;
       elements.panel.setAttribute("data-open", state.isOpen ? "true" : "false");
       elements.button.textContent = state.isOpen
-        ? config?.sdr?.close_button_label || "Fechar Chat"
+        ? config?.sdr?.close_button_label || "Fechar painel"
         : config?.sdr?.button_label || "Chat SDR";
 
       if (state.isOpen && state.messages.length === 0) {
-        const opening = config?.sdr?.opening_message || "Ola, posso te ajudar com sua necessidade comercial.";
-        void sendMessage(opening, elements, true);
+        appendMessage("assistant", panelCopy.openingMessage, elements);
       }
     });
 
-    elements.form.addEventListener("submit", async (event) => {
-      event.preventDefault();
+    elements.submit.addEventListener("click", async () => {
       if (state.chatClosed || state.isLoading) return;
       const text = String(elements.input.value || "").trim();
-      elements.input.value = "";
-      elements.submit.disabled = true;
       if (!text) return;
-      await sendMessage(text, elements, false);
+      elements.input.value = "";
+      await sendMessage(text, elements);
+    });
+
+    elements.confirm.addEventListener("click", () => {
+      updateStructuredPreview(elements, true);
+      appendMessage("system", panelCopy.payloadReadyMessage, elements);
     });
 
     elements.input.addEventListener("input", () => {
       elements.submit.disabled = state.isLoading || state.chatClosed || !elements.input.value.trim();
+    });
+
+    elements.mic.addEventListener("click", () => {
+      state.caseData.canal = "voz_premium";
+      updateStatus(elements, "ouvindo", panelCopy.voiceReadyMessage);
+      appendMessage("system", panelCopy.voiceReadyMessage, elements);
+      updateStructuredPreview(elements);
+    });
+
+    elements.write.addEventListener("click", () => {
+      state.caseData.canal = "texto";
+      updateStatus(elements, "idle", "");
+      updateStructuredPreview(elements);
+    });
+
+    elements.tts.addEventListener("click", () => {
+      appendMessage("system", panelCopy.ttsReadyMessage, elements);
     });
 
     elements.reset.addEventListener("click", () => {
@@ -116,25 +185,50 @@ export function initSdrWidget(config) {
       window.localStorage.removeItem(STORAGE_STATE_SNAPSHOT);
       state.messages = [];
       state.chatClosed = false;
+      state.caseData = {
+        nome: "",
+        contacto: "",
+        classification: panelCopy.classificationOptions[0]?.value || "outro",
+        urgencia: "media",
+        canal: "texto"
+      };
       elements.meta.setAttribute("data-closed", "false");
       elements.messages.innerHTML = "";
-      renderHint(elements.messages);
       elements.input.disabled = !state.apiReady;
       elements.submit.disabled = true;
+      elements.name.value = "";
+      elements.contact.value = "";
+      elements.classification.value = state.caseData.classification;
+      elements.urgency.value = state.caseData.urgencia;
+      updateStatus(elements, "idle", "");
+      updateStructuredPreview(elements);
+    });
+
+    elements.name.addEventListener("input", () => {
+      state.caseData.nome = String(elements.name.value || "").trim();
+      updateStructuredPreview(elements);
+    });
+    elements.contact.addEventListener("input", () => {
+      state.caseData.contacto = String(elements.contact.value || "").trim();
+      updateStructuredPreview(elements);
+    });
+    elements.classification.addEventListener("change", () => {
+      state.caseData.classification = String(elements.classification.value || "").trim();
+      updateStructuredPreview(elements);
+    });
+    elements.urgency.addEventListener("change", () => {
+      state.caseData.urgencia = String(elements.urgency.value || "media").trim();
+      updateStructuredPreview(elements);
     });
   }
 
-  async function sendMessage(text, elements, isSystemMessage) {
+  async function sendMessage(text, elements) {
     const cleanText = String(text || "").trim();
     if (!cleanText) return;
 
     if (!state.apiReady || !state.apiBaseUrl) {
       appendMessage("assistant", "Proxy local indisponivel no momento.", elements);
       return;
-    }
-
-    if (state.messages.length === 0) {
-      renderHint(elements.messages);
     }
 
     const visitorId = getOrCreateId(STORAGE_VISITOR_ID, "visitor");
@@ -148,9 +242,13 @@ export function initSdrWidget(config) {
       config
     });
 
-    if (!isSystemMessage) {
-      appendMessage("user", cleanText, elements);
+    appendMessage("user", cleanText, elements);
+
+    if (panelCopy.security && hasSensitiveContent(cleanText, panelCopy.security.terms)) {
+      appendMessage("assistant", panelCopy.security.phrase, elements);
     }
+
+    updateStatus(elements, "processando", panelCopy.typingMessage);
     setLoading(elements, true);
 
     try {
@@ -176,51 +274,192 @@ export function initSdrWidget(config) {
       state.chatClosed = shouldClose;
       elements.meta.setAttribute("data-closed", shouldClose ? "true" : "false");
 
-      const defaultHandoffMessage =
-        config?.sdr?.handoff_response ||
-        "Perfeito. Seu pedido foi enviado com prioridade.\nNosso time continua o atendimento pelos canais informados.";
-      const defaultReply = config?.sdr?.fallback_reply || "Posso te ajudar com mais contexto comercial.";
       const replyText = shouldClose
-        ? data.widget_message || defaultHandoffMessage
-        : data.widget_message || data.reply_text || defaultReply;
+        ? data.widget_message || panelCopy.closedMessage
+        : data.widget_message || data.reply_text || panelCopy.fallbackReply;
 
       appendMessage("assistant", replyText, elements);
+
+      const extracted = data?.extracted_fields || {};
+      state.caseData.nome = state.caseData.nome || extracted.nome || "";
+      state.caseData.contacto = state.caseData.contacto || extracted.telefone || extracted.email || "";
+      if (["baixa", "media", "alta"].includes(extracted.urgencia)) {
+        state.caseData.urgencia = extracted.urgencia;
+      }
+      elements.name.value = state.caseData.nome;
+      elements.contact.value = state.caseData.contacto;
+      elements.urgency.value = state.caseData.urgencia;
+      updateStructuredPreview(elements);
+      updateStatus(elements, shouldClose ? "respondendo" : "idle", "");
       elements.input.disabled = shouldClose;
       elements.submit.disabled = shouldClose;
     } catch (error) {
-      appendMessage(
-        "assistant",
-        config?.sdr?.error_message || "Nao consegui processar agora. Posso tentar novamente em alguns segundos?",
-        elements
-      );
+      appendMessage("assistant", panelCopy.errorMessage, elements);
       console.error("[sdr_widget_template] erro", error);
+      updateStatus(elements, "idle", "");
     } finally {
       setLoading(elements, false);
     }
   }
 
   function appendMessage(role, text, elements) {
-    state.messages.push({ role, text });
+    state.messages.push({ role, text, timestamp: Date.now() });
     const node = document.createElement("article");
-    node.className = "sdr-message" + (role === "user" ? " user" : "");
-    node.textContent = text;
+    node.className = `sdr-message${role === "user" ? " user" : role === "system" ? " system" : ""}`;
+    node.innerHTML = [
+      `<header><strong>${escapeHtml(roleLabel(role))}</strong><span>${role === "system" ? "Sistema" : "Texto"}</span></header>`,
+      `<p>${escapeHtml(text)}</p>`
+    ].join("");
     elements.messages.appendChild(node);
     elements.messages.scrollTop = elements.messages.scrollHeight;
+    updateStructuredPreview(elements);
   }
 
-  function renderHint(container) {
-    const hint = document.createElement("article");
-    hint.className = "sdr-message";
-    hint.textContent = config?.sdr?.hint_message || "Descreva seu contexto e eu monto o melhor próximo passo.";
-    container.appendChild(hint);
+  function updateStatus(elements, status, detail) {
+    elements.statusLabel.textContent = statusLabel(status);
+    elements.channelLabel.textContent = `${panelCopy.channelActiveLabel}: ${state.caseData.canal === "texto" ? "Texto" : "Voz premium"}`;
+    elements.status.textContent = detail || "";
+  }
+
+  function updateStructuredPreview(elements, confirmed = false) {
+    const summary = buildSummary(panelCopy, state.messages, state.caseData);
+    const payload = buildPayload(panelCopy, state.messages, state.caseData, {
+      conversationId: getOrCreateId(STORAGE_CONVERSATION_ID, "conv"),
+      visitorId: getOrCreateId(STORAGE_VISITOR_ID, "visitor")
+    });
+
+    elements.summary.textContent = confirmed || state.messages.length ? summary : "Ainda nao gerado.";
+    elements.payload.textContent = confirmed || state.messages.length ? JSON.stringify(payload, null, 2) : "Aguardando confirmacao de envio.";
   }
 
   function setLoading(elements, loading) {
     state.isLoading = loading;
     elements.input.disabled = loading || state.chatClosed || !state.apiReady;
     elements.submit.disabled = loading || state.chatClosed || !elements.input.value.trim();
-    elements.status.textContent = loading ? config?.sdr?.typing_message || "Atendimento digitando..." : "";
+    elements.confirm.disabled = loading;
   }
+}
+
+function resolvePanelCopy(config) {
+  const panel = config?.sdr?.conversation_panel || {};
+  const isLegal = String(config?.segment || "").includes("advoc");
+  return {
+    badge: panel.badge || "Piloto",
+    title: panel.title || (isLegal ? "Advocacia SDR Voz - Atendimento" : "Painel de atendimento"),
+    subtitle: panel.subtitle || "Triagem inicial em texto com estrutura pronta para voz premium.",
+    assistantTitle: panel.assistant_title || (isLegal ? "Assistente de triagem juridica" : "Assistente de conversa"),
+    openingMessage:
+      panel.opening_message || config?.sdr?.opening_message || "Ola. Posso organizar esta conversa inicial para agilizar o atendimento.",
+    primaryMicLabel: panel.primary_mic_label || "Iniciar microfone (voz premium)",
+    alternateTextLabel: panel.alternate_text_label || "Prefiro escrever",
+    voiceReadyMessage: panel.voice_ready_message || "Modo voz premium preparado para integracao futura com STT/TTS.",
+    listenReplyLabel: panel.listen_reply_label || "Ouvir resposta",
+    ttsReadyMessage: panel.tts_ready_message || "Estrutura pronta para TTS na proxima etapa.",
+    statusTitle: panel.status_title || "Status da conversa",
+    channelActiveLabel: panel.channel_active_label || "Canal ativo",
+    handoffSectionTitle: panel.handoff_section_title || "Dados para encaminhamento",
+    nameLabel: panel.name_label || "Nome",
+    namePlaceholder: panel.name_placeholder || "Nome do cliente",
+    contactLabel: panel.contact_label || "Contacto",
+    contactPlaceholder: panel.contact_placeholder || "Telefone ou email",
+    classificationLabel: panel.classification_label || "Classificacao",
+    classificationOptions: Array.isArray(panel.classification_options) && panel.classification_options.length
+      ? panel.classification_options
+      : [{ value: "outro", label: "Outro" }],
+    urgencyLabel: panel.urgency_label || "Urgencia",
+    summaryTitle: panel.summary_title || "Resumo estruturado",
+    payloadTitle: panel.payload_title || "Payload estruturado",
+    inputLabel: panel.input_label || "Mensagem",
+    inputPlaceholder: panel.input_placeholder || config?.sdr?.input_placeholder || "Descreva seu contexto",
+    sendLabel: panel.send_label || config?.sdr?.send_button_label || "Enviar",
+    confirmLabel: panel.confirm_label || "Confirmar envio",
+    payloadReadyMessage: panel.payload_ready_message || "Resumo e payload preparados para continuidade.",
+    fallbackReply: panel.fallback_reply || config?.sdr?.fallback_reply || "Posso seguir com a proxima etapa da conversa.",
+    errorMessage:
+      panel.error_message || config?.sdr?.error_message || "Nao consegui processar agora. Posso tentar novamente em alguns segundos?",
+    closedMessage:
+      panel.closed_message ||
+      config?.sdr?.handoff_done_message ||
+      "Perfeito. Seu pedido foi enviado com prioridade.\nNosso time continua o atendimento pelos canais informados.",
+    typingMessage: panel.typing_message || config?.sdr?.typing_message || "Atendimento digitando...",
+    classificationSummaryLabel: panel.classification_summary_label || panel.classification_label || "Classificacao",
+    mainReportLabel: panel.main_report_label || "Relato principal",
+    payloadKeys: {
+      classification: panel?.payload_keys?.classification || "classificacao",
+      summary: panel?.payload_keys?.summary || "resumo",
+      transcript: panel?.payload_keys?.transcript || "conversa_texto"
+    },
+    metadataSource: panel.metadata_source || `site_sdr_panel_${config?.client_slug || "template"}`,
+    security: panel.security_phrase
+      ? {
+          phrase: panel.security_phrase,
+          terms: Array.isArray(panel.security_terms) && panel.security_terms.length ? panel.security_terms : LEGAL_SENSITIVE_TERMS
+        }
+      : null
+  };
+}
+
+function buildSummary(copy, messages, caseData) {
+  const clienteTexts = messages.filter((entry) => entry.role === "user").map((entry) => entry.text);
+  const ultimoRelato = clienteTexts[clienteTexts.length - 1] || "-";
+  const classificationLabel = resolveClassificationLabel(copy, caseData.classification);
+  return [
+    `${copy.nameLabel}: ${caseData.nome || "-"}`,
+    `${copy.contactLabel}: ${caseData.contacto || "-"}`,
+    `${copy.classificationSummaryLabel}: ${classificationLabel}`,
+    `${copy.urgencyLabel}: ${caseData.urgencia || "-"}`,
+    `${copy.channelActiveLabel}: ${caseData.canal || "-"}`,
+    `${copy.mainReportLabel}: ${ultimoRelato}`
+  ].join("\n");
+}
+
+function buildPayload(copy, messages, caseData, ids) {
+  const classificationLabel = resolveClassificationLabel(copy, caseData.classification);
+  return {
+    nome: caseData.nome || "-",
+    contacto: caseData.contacto || "-",
+    urgencia: caseData.urgencia || "-",
+    canal: caseData.canal || "-",
+    [copy.payloadKeys.classification]: classificationLabel,
+    [copy.payloadKeys.summary]: buildSummary(copy, messages, caseData),
+    [copy.payloadKeys.transcript]: buildTranscript(messages),
+    metadata: {
+      conversation_id: ids.conversationId,
+      visitor_id: ids.visitorId,
+      source: copy.metadataSource,
+      ready_for_clickup: true
+    }
+  };
+}
+
+function buildTranscript(messages) {
+  return messages
+    .filter((entry) => entry.role !== "system")
+    .map((entry) => `${roleLabel(entry.role)}: ${entry.text}`)
+    .join("\n");
+}
+
+function resolveClassificationLabel(copy, value) {
+  const matched = (copy.classificationOptions || []).find((option) => option.value === value);
+  return matched?.label || value || "-";
+}
+
+function hasSensitiveContent(text, terms) {
+  const normalized = String(text || "").toLowerCase();
+  return terms.some((term) => normalized.includes(String(term || "").toLowerCase()));
+}
+
+function roleLabel(role) {
+  if (role === "user") return "Cliente";
+  if (role === "assistant") return "Dora";
+  return "Sistema";
+}
+
+function statusLabel(status) {
+  if (status === "ouvindo") return "Ouvindo";
+  if (status === "processando") return "Processando";
+  if (status === "respondendo") return "Respondendo";
+  return "Pronto";
 }
 
 function getOrCreateId(storageKey, prefix) {
