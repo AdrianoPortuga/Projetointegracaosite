@@ -6,6 +6,8 @@ export function buildSdrPayload({ message, conversationId, visitorId, stateSnaps
   const pageContext = config?.page_context || {};
   const sdr = config?.sdr || {};
   const knowledge = config?.knowledge || {};
+  const brand = config?.brand || {};
+  const businessProfile = knowledge?.business_profile || {};
   const routing = config?.lead_routing || {};
   const baseOrigin = sdr.origin_label || `site_widget_${config?.client_slug || "template"}`;
   const operationalMode = config?.operational_mode || (config?.demo_mode ? "demo" : "production");
@@ -47,8 +49,35 @@ export function buildSdrPayload({ message, conversationId, visitorId, stateSnaps
     utm_term: tracking.utm_term,
     sdr_goal: sdr.goal || null,
     sdr_tone: sdr.tone || null,
+    brand_name: brand.name || businessProfile.brand_name || null,
+    brand_headline: brand.headline || businessProfile.headline || null,
+    brand_description: brand.description || null,
+    business_name: businessProfile.business_name || businessProfile.brand_name || brand.name || null,
+    target_region: businessProfile.target_region || null,
+    service_scope: Array.isArray(businessProfile.service_scope) ? businessProfile.service_scope : [],
+    business_differentials: Array.isArray(businessProfile.differentials) ? businessProfile.differentials : [],
+    client_context_summary: buildClientContextSummary({
+      brand,
+      businessProfile,
+      segment: config?.segment,
+      goal: sdr.goal
+    }),
     collect_fields: Array.isArray(sdr.collect_fields) ? sdr.collect_fields : [],
     qualification_rules: sdr?.knowledge_overrides?.qualification_rules || knowledge?.qualification_rules || {},
     handoff_rules: sdr?.knowledge_overrides?.handoff_rules || knowledge?.handoff_rules || {}
   };
+}
+
+function buildClientContextSummary({ brand, businessProfile, segment, goal }) {
+  const parts = [
+    brand?.name || businessProfile?.brand_name,
+    segment ? `segmento ${segment}` : null,
+    goal || null,
+    Array.isArray(businessProfile?.service_scope) && businessProfile.service_scope.length
+      ? `atua em ${businessProfile.service_scope.join(", ")}`
+      : null,
+    businessProfile?.target_region ? `regiao ${businessProfile.target_region}` : null
+  ].filter(Boolean);
+
+  return parts.join(" | ") || null;
 }

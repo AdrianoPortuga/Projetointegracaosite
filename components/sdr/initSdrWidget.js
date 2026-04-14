@@ -66,6 +66,7 @@ export function initSdrWidget(config) {
     const panel = document.createElement("section");
     panel.id = "sdr-widget-panel";
     panel.setAttribute("data-open", "false");
+    panel.setAttribute("data-voice-state", "idle");
 
     const title = copy.title;
     const modeTag = siteConfig?.demo_mode ? " [DEMO]" : "";
@@ -98,6 +99,10 @@ export function initSdrWidget(config) {
       `<div id="sdr-widget-meta" data-closed="false"><span id="sdr-widget-closed-text">${escapeHtml(copy.closedMessage)}</span><button id="sdr-widget-reset" type="button">${escapeHtml(closeLabel)}</button></div>`,
       "</section>",
       '<section id="sdr-widget-right">',
+      '<div class="sdr-voice-inline-bar">',
+      `<div class="sdr-voice-inline-copy"><span class="sdr-mini-label">${escapeHtml(copy.voiceHintBadge)}</span><strong>${escapeHtml(copy.voiceHintTitle)}</strong><p id="sdr-widget-voice-hint">${escapeHtml(copy.voiceHintIdle)}</p></div>`,
+      `<button id="sdr-widget-mic-inline" class="sdr-round-mic" type="button" aria-label="${escapeHtml(copy.voiceHintAriaLabel)}"><span class="sdr-round-mic-core"></span></button>`,
+      "</div>",
       '<div id="sdr-widget-messages"></div>',
       '<div id="sdr-widget-composer">',
       `<label for="sdr-widget-input">${escapeHtml(copy.inputLabel)}</label>`,
@@ -134,8 +139,10 @@ export function initSdrWidget(config) {
       meta: panel.querySelector("#sdr-widget-meta"),
       reset: panel.querySelector("#sdr-widget-reset"),
       mic: panel.querySelector("#sdr-widget-mic"),
+      micInline: panel.querySelector("#sdr-widget-mic-inline"),
       write: panel.querySelector("#sdr-widget-write"),
       tts: panel.querySelector("#sdr-widget-tts"),
+      voiceHint: panel.querySelector("#sdr-widget-voice-hint"),
       name: panel.querySelector("#sdr-widget-name"),
       contact: panel.querySelector("#sdr-widget-contact"),
       classification: panel.querySelector("#sdr-widget-classification"),
@@ -174,6 +181,11 @@ export function initSdrWidget(config) {
     });
 
     elements.mic.addEventListener("click", async () => {
+      if (state.voice.listening || state.isLoading || state.chatClosed) return;
+      await startVoiceRecognition(elements);
+    });
+
+    elements.micInline.addEventListener("click", async () => {
       if (state.voice.listening || state.isLoading || state.chatClosed) return;
       await startVoiceRecognition(elements);
     });
@@ -365,6 +377,7 @@ export function initSdrWidget(config) {
     if (!lastAssistantMessage?.text || state.voice.speaking) return;
 
     try {
+      state.voice.speaking = true;
       setVoiceBusy(elements, true);
       updateStatus(elements, "respondendo", panelCopy.speakingMessage);
 
@@ -393,7 +406,6 @@ export function initSdrWidget(config) {
       stopCurrentAudio();
       const audio = new Audio(`data:${data.contentType || "audio/mpeg"};base64,${data.audioBase64}`);
       state.voice.currentAudio = audio;
-      state.voice.speaking = true;
       audio.addEventListener("ended", () => {
         state.voice.speaking = false;
         state.voice.currentAudio = null;
@@ -435,6 +447,7 @@ export function initSdrWidget(config) {
     elements.statusLabel.textContent = statusLabel(status);
     elements.channelLabel.textContent = `${panelCopy.channelActiveLabel}: ${state.caseData.canal === "texto" ? "Texto" : "Voz premium"}`;
     elements.status.textContent = detail || "";
+    updateVoiceHint(elements, status, detail);
   }
 
   function updateStructuredPreview(elements, confirmed = false) {
@@ -454,14 +467,17 @@ export function initSdrWidget(config) {
     elements.submit.disabled = loading || state.chatClosed || !elements.input.value.trim();
     elements.confirm.disabled = loading;
     elements.mic.disabled = loading || state.chatClosed || state.voice.listening;
+    elements.micInline.disabled = loading || state.chatClosed || state.voice.listening;
     elements.write.disabled = loading || state.voice.listening;
     elements.tts.disabled = loading || state.voice.listening || state.voice.speaking || !state.messages.some((entry) => entry.role === "assistant");
   }
 
   function setVoiceBusy(elements, busy) {
     elements.mic.disabled = busy || state.isLoading || state.chatClosed;
+    elements.micInline.disabled = busy || state.isLoading || state.chatClosed;
     elements.write.disabled = busy || state.isLoading;
     elements.tts.disabled = busy || state.isLoading || !state.messages.some((entry) => entry.role === "assistant");
+    elements.panel.setAttribute("data-voice-state", busy ? (state.voice.listening ? "listening" : "speaking") : "idle");
   }
 
   function stopVoiceRecognition() {
@@ -488,6 +504,25 @@ export function initSdrWidget(config) {
     state.voice.currentAudio = null;
     state.voice.speaking = false;
   }
+
+  function updateVoiceHint(elements, status, detail) {
+    if (!elements.voiceHint) return;
+
+    if (status === "ouvindo") {
+      elements.voiceHint.textContent = panelCopy.voiceHintListening;
+      elements.panel.setAttribute("data-voice-state", "listening");
+      return;
+    }
+
+    if (status === "respondendo" && state.voice.speaking) {
+      elements.voiceHint.textContent = panelCopy.voiceHintSpeaking;
+      elements.panel.setAttribute("data-voice-state", "speaking");
+      return;
+    }
+
+    elements.voiceHint.textContent = detail || panelCopy.voiceHintIdle;
+    elements.panel.setAttribute("data-voice-state", "idle");
+  }
 }
 
 function resolvePanelCopy(config) {
@@ -506,6 +541,12 @@ function resolvePanelCopy(config) {
     voiceUnavailableMessage:
       panel.voice_unavailable_message ||
       "Nao foi possivel iniciar o Azure Speech agora. O painel continua disponivel em modo texto.",
+    voiceHintBadge: panel.voice_hint_badge || "Voz premium",
+    voiceHintTitle: panel.voice_hint_title || "Fale com a Dora por audio",
+    voiceHintIdle: panel.voice_hint_idle || "Clique no botao redondo ao lado e fale o seu caso.",
+    voiceHintListening: panel.voice_hint_listening || "Ouvindo agora. Fale naturalmente para iniciar a triagem.",
+    voiceHintSpeaking: panel.voice_hint_speaking || "A Dora esta a responder em voz.",
+    voiceHintAriaLabel: panel.voice_hint_aria_label || "Ativar microfone para falar com a Dora",
     listeningMessage: panel.listening_message || "Estou a ouvir. Fale agora.",
     speakingMessage: panel.speaking_message || "A ler a ultima resposta em voz.",
     transcriptionReadyMessage: panel.transcription_ready_message || "Transcricao capturada e enviada para a Dora.",
