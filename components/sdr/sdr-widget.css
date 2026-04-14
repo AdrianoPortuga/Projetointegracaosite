@@ -32,10 +32,12 @@
 #sdr-widget-panel {
   position: fixed;
   right: 20px;
+  top: 16px;
   bottom: 74px;
   z-index: 9999;
   width: min(960px, calc(100vw - 32px));
-  height: min(78vh, 720px);
+  height: auto;
+  max-height: calc(100vh - 90px);
   border: 1px solid var(--sdr-border);
   border-radius: 22px;
   overflow: hidden;
@@ -84,11 +86,14 @@
   padding: 18px;
   min-height: 0;
   flex: 1;
+  overflow: hidden;
 }
 
 #sdr-widget-left,
 #sdr-widget-right {
   min-height: 0;
+  overflow-y: auto;
+  padding-right: 4px;
 }
 
 #sdr-widget-left {
@@ -196,7 +201,7 @@
 #sdr-widget-messages {
   flex: 1;
   overflow-y: auto;
-  min-height: 280px;
+  min-height: 220px;
   border: 1px solid var(--sdr-border);
   border-radius: 18px;
   padding: 14px;
@@ -294,9 +299,11 @@
 @media (max-width: 900px) {
   #sdr-widget-panel {
     width: calc(100vw - 24px);
-    height: min(84vh, 860px);
-    right: 12px;
+    top: 12px;
     bottom: 66px;
+    height: auto;
+    max-height: calc(100vh - 78px);
+    right: 12px;
   }
 
   #sdr-widget-shell {
@@ -316,6 +323,11 @@
 
   #sdr-widget-header h2 {
     font-size: 20px;
+  }
+
+  #sdr-widget-left,
+  #sdr-widget-right {
+    padding-right: 0;
   }
 
   .sdr-composer-actions {

@@ -43,9 +43,16 @@
       "opening_message": "Ola, eu sou a Dora e vou fazer a triagem inicial do seu atendimento juridico. Pode escolher escrever agora ou usar voz premium quando estiver disponivel.",
       "primary_mic_label": "Iniciar microfone (voz premium)",
       "alternate_text_label": "Prefiro escrever",
-      "voice_ready_message": "Modo voz premium preparado. Integracao com Azure STT/TTS sera conectada na proxima etapa.",
+      "voice_ready_message": "Modo voz premium ativo com Azure Speech.",
+      "voice_unavailable_message": "Nao foi possivel iniciar o Azure Speech agora. O painel continua disponivel em modo texto.",
+      "listening_message": "Estou a ouvir. Fale agora para a triagem inicial.",
+      "speaking_message": "A ler a ultima resposta da Dora em voz.",
+      "transcription_ready_message": "Transcricao capturada e enviada para a Dora.",
+      "no_speech_detected_message": "Nao consegui captar fala valida. Pode tentar de novo ou escrever.",
       "listen_reply_label": "Ouvir resposta (TTS - preparado)",
-      "tts_ready_message": "Ponto de integracao pronto para TTS. A resposta da Dora podera ser lida em voz na proxima etapa.",
+      "tts_ready_message": "Ponto de integracao pronto para TTS.",
+      "tts_fallback_message": "Azure TTS indisponivel. Usei a leitura local do browser como fallback.",
+      "tts_error_message": "Nao consegui ler a resposta em voz neste momento.",
       "status_title": "Status da conversa",
       "channel_active_label": "Canal ativo",
       "handoff_section_title": "Dados para encaminhamento",
@@ -80,6 +87,9 @@
         "transcript": "conversa_texto"
       },
       "metadata_source": "advocacia_demo_voice_panel",
+      "voice_recognition_language": "pt-PT",
+      "voice_synthesis_language": "pt-PT",
+      "voice_name": "pt-PT-RaquelNeural",
       "security_phrase": "Posso fazer a triagem inicial e encaminhar seu caso para a equipa. A analise juridica final sera feita pelo profissional responsavel.",
       "security_terms": ["violencia", "abuso", "agressao", "deport", "expuls", "despejo", "ameaca", "urgente"]
     }
