@@ -1,7 +1,7 @@
 import { collectTrackingContext } from "../tracking/context.js";
 import { buildNamespace } from "./namespace.js";
 
-export function buildSdrPayload({ message, conversationId, visitorId, stateSnapshot, config, trackingOverride }) {
+export function buildSdrPayload({ message, conversationId, visitorId, stateSnapshot, conversationText, caseSummary, config, trackingOverride }) {
   const tracking = trackingOverride || collectTrackingContext();
   const pageContext = config?.page_context || {};
   const sdr = config?.sdr || {};
@@ -19,6 +19,8 @@ export function buildSdrPayload({ message, conversationId, visitorId, stateSnaps
     conversation_id: conversationId,
     visitor_id: visitorId,
     message,
+    conversa_texto: conversationText || null,
+    resumo_caso: caseSummary || null,
     page_url: tracking.current_url || window.location.href,
     page_slug: tracking.page_path || window.location.pathname,
     page_type: pageContext.page_type || "unknown",

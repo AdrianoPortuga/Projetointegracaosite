@@ -258,11 +258,18 @@ export function initSdrWidget(config) {
     const visitorId = getOrCreateId(STORAGE_VISITOR_ID, "visitor");
     const conversationId = getOrCreateId(STORAGE_CONVERSATION_ID, "conv");
     const stateSnapshot = readStateSnapshot(STORAGE_STATE_SNAPSHOT);
+    const conversationText = buildTranscript([
+      ...state.messages,
+      { role: "user", text: cleanText, timestamp: Date.now(), source }
+    ]);
+    const caseSummary = buildSummary(panelCopy, [...state.messages, { role: "user", text: cleanText }], state.caseData);
     const payload = buildSdrPayload({
       message: cleanText,
       conversationId,
       visitorId,
       stateSnapshot,
+      conversationText,
+      caseSummary,
       config
     });
 
